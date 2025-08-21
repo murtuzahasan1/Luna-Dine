@@ -1786,6 +1786,8 @@
             letter-spacing: 0.025em;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            pointer-events: auto;
+            z-index: 1;
         }
         
         .checkout-btn::before {
@@ -2034,174 +2036,450 @@
             font-weight: 400;
         }
         
-        /* Payment Methods */
+        /* Enhanced Payment Methods */
         .payment-methods {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-md);
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-md);
         }
-        
+
         .payment-method {
-            padding: var(--spacing-md);
+            padding: var(--spacing-lg);
             border: 2px solid var(--light-border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-xl);
             cursor: pointer;
             text-align: center;
             transition: all var(--transition-normal);
+            background: white;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .payment-method::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(220, 38, 38, 0.05));
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .payment-method:hover::before {
+            opacity: 1;
+        }
+
         .payment-method:hover {
             border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
-        
+
         .payment-method.selected {
             border-color: var(--primary-color);
-            background: #fef2f2;
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15);
+            transform: translateY(-2px);
         }
-        
+
+        .payment-method.selected::after {
+            content: '✓';
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            background: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
         .payment-icon {
-            font-size: 1.5rem;
+            font-size: 2rem;
+            margin-bottom: var(--spacing-md);
+            transition: all var(--transition-normal);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .payment-method:hover .payment-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .payment-method.selected .payment-icon {
+            background: linear-gradient(135deg, var(--primary-dark), #991b1b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .payment-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--secondary-color);
             margin-bottom: var(--spacing-xs);
         }
-        
-        .payment-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--secondary-color);
-        }
-        
+
         .payment-desc {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--light-text);
-            margin-top: 2px;
+            line-height: 1.3;
         }
         
-        /* Enhanced Order Modal Styles */
+        /* Enhanced Order Modal Styles - Polished UI/UX */
         .order-modal .modal-content {
-            max-width: 600px;
-            padding: var(--spacing-xl);
+            max-width: 700px;
+            padding: 0;
+            background: white;
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            overflow: hidden;
+            animation: modalSlideIn 0.4s var(--ease-out);
         }
-        
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Modal Header */
+        .order-modal .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: var(--spacing-xl) var(--spacing-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-modal .modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .order-modal .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .order-modal .close-modal {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+
+        .order-modal .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        /* Modal Body */
+        .order-modal #orderForm {
+            padding: var(--spacing-2xl);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Custom Scrollbar */
+        .order-modal #orderForm::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .order-modal #orderForm::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: var(--radius-full);
+        }
+
+        .order-modal #orderForm::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: var(--radius-full);
+        }
+
+        .order-modal #orderForm::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Form Sections */
         .form-section {
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid var(--light-border);
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-xl);
+            background: var(--light-bg);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--light-border);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gradient);
+            transform: scaleY(0);
+            transition: transform var(--transition-normal);
+        }
+
+        .form-section:hover::before {
+            transform: scaleY(1);
+        }
+
         .form-section:last-child {
             margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
         }
-        
+
+        /* Section Titles */
         .section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 700;
             color: var(--secondary-color);
             margin-bottom: var(--spacing-lg);
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-md);
+            position: relative;
         }
-        
-        .section-title::before {
+
+        .section-title::after {
             content: '';
-            width: 4px;
-            height: 20px;
-            background: var(--primary-gradient);
-            border-radius: var(--radius-sm);
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary-color), transparent);
+            margin-left: var(--spacing-md);
         }
-        
+
+        /* Form Controls */
+        .form-label {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: var(--spacing-sm);
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: 2px solid var(--light-border);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            transition: all var(--transition-normal);
+            background: white;
+            color: var(--secondary-color);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-control::placeholder {
+            color: var(--light-text);
+            font-weight: 400;
+        }
+
+        /* Form Rows */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
         }
-        
-        /* Order Type Selector */
+
+        /* Enhanced Order Type Selector */
         .order-type-selector {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-md);
         }
-        
+
         .order-type-option {
-            padding: var(--spacing-md);
+            padding: var(--spacing-lg);
             border: 2px solid var(--light-border);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             cursor: pointer;
             text-align: center;
             transition: all var(--transition-normal);
             background: white;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .order-type-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
+            transition: left var(--transition-normal);
+        }
+
+        .order-type-option:hover::before {
+            left: 100%;
+        }
+
         .order-type-option:hover {
             border-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
         }
-        
+
         .order-type-option.selected {
             border-color: var(--primary-color);
             background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.15);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.2);
+            transform: translateY(-2px);
         }
-        
+
+        .order-type-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            background: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
         .order-type-icon {
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: var(--primary-color);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            transition: all var(--transition-normal);
         }
-        
+
+        .order-type-option:hover .order-type-icon {
+            transform: scale(1.1);
+        }
+
         .order-type-option.selected .order-type-icon {
             color: var(--primary-dark);
         }
-        
+
         .order-type-name {
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 700;
+            font-size: 1rem;
             color: var(--secondary-color);
-            margin-bottom: 2px;
+            margin-bottom: var(--spacing-xs);
         }
-        
+
         .order-type-desc {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--light-text);
+            line-height: 1.4;
         }
         
-        /* Table Selection */
+        /* Enhanced Table Selection */
         .table-section {
             transition: all var(--transition-normal);
         }
-        
+
         .table-selector {
             border: 2px solid var(--light-border);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-md);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
             background: white;
-            min-height: 120px;
+            min-height: 140px;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .table-selector::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(220, 38, 38, 0.03), transparent 70%);
+            pointer-events: none;
+        }
+
         .table-loading {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--spacing-sm);
+            gap: var(--spacing-md);
             color: var(--light-text);
-            font-size: 0.9rem;
-            padding: var(--spacing-lg);
+            font-size: 0.95rem;
+            padding: var(--spacing-xl);
+            background: var(--light-bg);
+            border-radius: var(--radius-lg);
         }
-        
+
+        .table-loading i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
         .table-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: var(--spacing-sm);
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: var(--spacing-md);
         }
-        
+
         .table-item {
             aspect-ratio: 1;
             border: 2px solid var(--light-border);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -2210,156 +2488,469 @@
             transition: all var(--transition-normal);
             background: white;
             position: relative;
+            overflow: hidden;
         }
-        
+
+        .table-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(16, 185, 129, 0.05));
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .table-item:hover::before {
+            opacity: 1;
+        }
+
         .table-item:hover {
             border-color: var(--primary-color);
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
-        
+
         .table-item.selected {
-            border-color: var(--primary-color);
-            background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+            transform: scale(1.02) translateY(-1px);
         }
-        
+
+        .table-item.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--success-color);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
         .table-item.occupied {
             border-color: var(--danger-color);
             background: linear-gradient(135deg, #fef2f2, #fecaca);
             cursor: not-allowed;
             opacity: 0.7;
+            transform: none;
         }
-        
+
+        .table-item.occupied::before {
+            display: none;
+        }
+
         .table-item.reserved {
             border-color: var(--warning-color);
             background: linear-gradient(135deg, #fffbeb, #fef3c7);
             cursor: not-allowed;
             opacity: 0.8;
+            transform: none;
         }
-        
+
+        .table-item.reserved::before {
+            display: none;
+        }
+
         .table-number {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--secondary-color);
         }
-        
+
         .table-capacity {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             color: var(--light-text);
-            margin-top: 2px;
+            margin-top: 4px;
         }
-        
+
         .table-status {
             position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 8px;
-            height: 8px;
+            top: 6px;
+            right: 6px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
+            box-shadow: 0 0 4px rgba(0,0,0,0.2);
         }
-        
+
         .table-item.available .table-status {
             background: var(--success-color);
+            animation: pulse 2s infinite;
         }
-        
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
         .table-item.occupied .table-status {
             background: var(--danger-color);
         }
-        
+
         .table-item.reserved .table-status {
             background: var(--warning-color);
         }
-        
-        /* Delivery Address */
+
+        /* Enhanced Delivery Address */
         .delivery-section {
             transition: all var(--transition-normal);
         }
-        
+
         .address-form {
             border: 2px solid var(--light-border);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-md);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
             background: white;
+            position: relative;
+            overflow: hidden;
         }
-        
-        /* Form Actions */
+
+        .address-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at bottom left, rgba(220, 38, 38, 0.02), transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Enhanced Form Actions */
         .form-actions {
             display: flex;
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
             justify-content: flex-end;
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid var(--light-border);
+            margin-top: var(--spacing-2xl);
+            padding-top: var(--spacing-xl);
+            border-top: 2px solid var(--light-border);
+            position: relative;
         }
-        
+
+        .form-actions::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--primary-gradient);
+        }
+
         .form-actions .btn {
-            min-width: 120px;
+            min-width: 140px;
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-weight: 600;
+            border-radius: var(--radius-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-actions .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left var(--transition-normal);
+        }
+
+        .form-actions .btn:hover::before {
+            left: 100%;
         }
         
-        /* Responsive Design */
+        /* Enhanced Responsive Design */
+        @media (max-width: 1024px) {
+            .order-modal .modal-content {
+                max-width: 90%;
+                margin: var(--spacing-md);
+            }
+
+            .order-type-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .order-modal .modal-content {
-                padding: var(--spacing-lg);
-                margin: var(--spacing-md);
-                max-height: calc(100vh - 2rem);
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .order-type-selector {
-                grid-template-columns: 1fr;
-            }
-            
-            .payment-methods {
-                grid-template-columns: 1fr;
-            }
-            
-            .table-grid {
-                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .form-actions .btn {
-                width: 100%;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .order-modal .modal-content {
-                padding: var(--spacing-md);
                 margin: var(--spacing-sm);
+                max-height: calc(100vh - 1rem);
                 border-radius: var(--radius-xl);
             }
-            
+
+            .order-modal .modal-header {
+                padding: var(--spacing-lg) var(--spacing-xl);
+            }
+
+            .order-modal .modal-title {
+                font-size: 1.3rem;
+            }
+
+            .order-modal #orderForm {
+                padding: var(--spacing-xl);
+                max-height: 60vh;
+            }
+
+            .form-section {
+                padding: var(--spacing-lg);
+                margin-bottom: var(--spacing-xl);
+            }
+
             .section-title {
+                font-size: 1.1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .order-type-selector {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .order-type-option {
+                padding: var(--spacing-md);
+            }
+
+            .order-type-icon {
+                font-size: 1.8rem;
+            }
+
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-md);
+            }
+
+            .payment-method {
+                padding: var(--spacing-md);
+            }
+
+            .payment-icon {
+                font-size: 1.8rem;
+            }
+
+            .table-grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: var(--spacing-sm);
+            }
+
+            .table-item {
+                aspect-ratio: 1;
+                padding: var(--spacing-sm);
+            }
+
+            .table-number {
                 font-size: 1rem;
             }
-            
-            .order-type-icon {
+
+            .table-capacity {
+                font-size: 0.75rem;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: var(--spacing-md);
+                margin-top: var(--spacing-xl);
+                padding-top: var(--spacing-lg);
+            }
+
+            .form-actions .btn {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .order-modal .modal-content {
+                margin: var(--spacing-xs);
+                border-radius: var(--radius-lg);
+            }
+
+            .order-modal .modal-header {
+                padding: var(--spacing-md) var(--spacing-lg);
+            }
+
+            .order-modal .modal-title {
                 font-size: 1.2rem;
             }
-            
+
+            .order-modal #orderForm {
+                padding: var(--spacing-lg);
+            }
+
+            .form-section {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-lg);
+            }
+
+            .section-title {
+                font-size: 1rem;
+                margin-bottom: var(--spacing-md);
+            }
+
+            .section-title::after {
+                display: none;
+            }
+
+            .form-control {
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 0.95rem;
+            }
+
+            .order-type-option {
+                padding: var(--spacing-md);
+                text-align: left;
+                display: flex;
+                align-items: center;
+                gap: var(--spacing-md);
+            }
+
+            .order-type-icon {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+                min-width: 40px;
+            }
+
+            .order-type-text {
+                flex: 1;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .payment-method {
+                padding: var(--spacing-md);
+                text-align: left;
+                display: flex;
+                align-items: center;
+                gap: var(--spacing-md);
+            }
+
+            .payment-icon {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+                min-width: 40px;
+            }
+
+            .payment-text {
+                flex: 1;
+            }
+
             .table-grid {
                 grid-template-columns: repeat(4, 1fr);
                 gap: var(--spacing-xs);
             }
-            
+
             .table-item {
                 aspect-ratio: 1;
                 padding: var(--spacing-xs);
             }
-            
+
             .table-number {
-                font-size: 0.8rem;
+                font-size: 0.9rem;
             }
-            
+
             .table-capacity {
-                font-size: 0.6rem;
+                font-size: 0.7rem;
+                display: none;
+            }
+
+            .table-status {
+                width: 8px;
+                height: 8px;
+                top: 2px;
+                right: 2px;
+            }
+
+            .form-actions {
+                margin-top: var(--spacing-lg);
+                padding-top: var(--spacing-md);
+            }
+
+            .form-actions .btn {
+                padding: var(--spacing-sm) var(--spacing-lg);
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Accessibility Enhancements */
+        .order-modal .modal-content:focus-within {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        .order-type-option:focus,
+        .payment-method:focus,
+        .table-item:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            z-index: 10;
+        }
+
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            .order-type-option,
+            .payment-method,
+            .table-item {
+                border-width: 3px;
+            }
+
+            .form-control {
+                border-width: 3px;
+            }
+
+            .section-title::before {
+                width: 6px;
+            }
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            .order-modal .modal-content,
+            .order-type-option,
+            .payment-method,
+            .table-item,
+            .form-control,
+            .btn {
+                animation: none;
+                transition: none;
+            }
+
+            .order-type-option:hover,
+            .payment-method:hover,
+            .table-item:hover {
+                transform: none;
             }
         }
         
@@ -3507,6 +4098,32 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <span>শাখা পরিবর্তন</span>
                     </button>
+                    
+                    <!-- Language Switcher -->
+                    <div class="dropdown" id="languageDropdown">
+                        <button class="btn btn-secondary" id="languageBtn">
+                            <i class="fas fa-language"></i>
+                            <span id="currentLang">বাংলা</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="languageMenu">
+                            <div class="dropdown-header">
+                                <span><i class="fas fa-language"></i> ভাষা পরিবর্তন</span>
+                            </div>
+                            <div class="dropdown-item" onclick="setLanguage('bn')">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-check" id="lang-bn-check" style="color: var(--success-color);"></i>
+                                    <span>বাংলা</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-item" onclick="setLanguage('en')">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fas fa-check" id="lang-en-check" style="color: var(--success-color); display: none;"></i>
+                                    <span>English</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -3621,7 +4238,7 @@
                     <span id="total">৳0</span>
                 </div>
             </div>
-            <button class="checkout-btn" id="checkoutBtn">অর্ডার করুন</button>
+            <button class="checkout-btn" id="checkoutBtn" onclick="handleCheckout()">অর্ডার করুন</button>
         </div>
     </div>
     
@@ -3659,7 +4276,7 @@
             </div>
             <form id="orderForm">
                 <div class="form-section">
-                    <h4 class="section-title">গ্রাহক তথ্য</h4>
+                    <h4 class="section-title" data-section="customer-info">গ্রাহক তথ্য</h4>
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">নাম:</label>
@@ -3673,7 +4290,7 @@
                 </div>
 
                 <div class="form-section">
-                    <h4 class="section-title">অর্ডারের বিবরণ</h4>
+                    <h4 class="section-title" data-section="order-details">অর্ডারের বিবরণ</h4>
                     <div class="form-group">
                         <label class="form-label">অর্ডারের ধরন:</label>
                         <div class="order-type-selector">
@@ -3751,7 +4368,7 @@
                 </div>
 
                 <div class="form-section">
-                    <h4 class="section-title">পেমেন্ট তথ্য</h4>
+                    <h4 class="section-title" data-section="payment-info">পেমেন্ট তথ্য</h4>
                     <div class="form-group">
                         <label class="form-label">পেমেন্ট পদ্ধতি:</label>
                         <div class="payment-methods">
@@ -3781,11 +4398,12 @@
                                 <div class="payment-desc">মোবাইল ব্যাংকিং</div>
                             </div>
                         </div>
+                        <input type="hidden" id="selectedPaymentMethod" required>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <h4 class="section-title">অতিরিক্ত তথ্য</h4>
+                    <h4 class="section-title" data-section="additional-info">অতিরিক্ত তথ্য</h4>
                     <div class="form-group">
                         <label class="form-label">বিশেষ নির্দেশনা:</label>
                         <textarea class="form-control" id="orderNotes" rows="3" placeholder="কোনো বিশেষ নির্দেশনা থাকলে লিখুন..."></textarea>
@@ -3900,6 +4518,7 @@
             selectedPaymentMethod: '',
             branchId: new URLSearchParams(window.location.search).get('branch') || '1',
             tableId: new URLSearchParams(window.location.search).get('table') || '',
+            currentLanguage: localStorage.getItem('preferredLanguage') || 'en', // Default to English
             
             // Filtering and Search
             currentFilters: {
@@ -4090,6 +4709,735 @@
                 });
             }
         };
+        
+        // Language Service
+        const LanguageService = {
+            /**
+             * Initialize language settings
+             */
+            init: () => {
+                // Set the language immediately from localStorage or default
+                const savedLanguage = localStorage.getItem('preferredLanguage') || 'en'; // Default to English
+                AppState.currentLanguage = savedLanguage;
+                
+                // Update the DOM language attribute immediately
+                document.documentElement.lang = savedLanguage;
+                
+                // Setup event listeners
+                LanguageService.setupEventListeners();
+                
+                // Update all UI elements immediately after DOM is ready
+                setTimeout(() => {
+                    LanguageService.updateLanguage(savedLanguage);
+                    LanguageService.updateSearchAndFilterControls();
+                    LanguageService.updateStaticText();
+                    
+                    // Force update menu display regardless of whether items are loaded
+                    LanguageService.updateMenuDisplay();
+                    
+                    // Force update category navigation regardless of whether categories are loaded
+                    LanguageService.updateCategoryNavigation();
+                    
+                    // Update order modal and order status modal
+                    LanguageService.updateOrderModal();
+                    LanguageService.updateOrderStatusModal();
+                    
+                    // If menu service is available, force a reload to ensure proper language
+                    if (typeof MenuService !== 'undefined' && MenuService.loadMenuItems) {
+                        MenuService.loadMenuItems().then(() => {
+                            // After loading, update everything again to ensure consistency
+                            LanguageService.updateMenuDisplay();
+                            LanguageService.updateCategoryNavigation();
+                            LanguageService.updateOrderModal();
+                            LanguageService.updateOrderStatusModal();
+                        });
+                    }
+                }, 100); // Slightly longer delay to ensure DOM is ready
+            },
+            
+            /**
+             * Setup event listeners for language dropdown
+             */
+            setupEventListeners: () => {
+                const languageBtn = document.getElementById('languageBtn');
+                const languageMenu = document.getElementById('languageMenu');
+                const languageDropdown = document.getElementById('languageDropdown');
+                
+                if (languageBtn && languageMenu) {
+                    languageBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        languageMenu.classList.toggle('show');
+                        
+                        // Close other dropdowns
+                        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                            if (menu !== languageMenu) {
+                                menu.classList.remove('show');
+                            }
+                        });
+                    });
+                }
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', () => {
+                    if (languageMenu) {
+                        languageMenu.classList.remove('show');
+                    }
+                });
+            },
+            
+            /**
+             * Set the current language
+             * @param {string} language - Language code ('bn' or 'en')
+             */
+            setLanguage: (language) => {
+                if (language !== 'bn' && language !== 'en') {
+                    console.error('Invalid language code:', language);
+                    return;
+                }
+                
+                AppState.currentLanguage = language;
+                localStorage.setItem('preferredLanguage', language);
+                LanguageService.updateLanguage(language);
+                
+                // Refresh the UI to show updated language
+                LanguageService.refreshUI();
+            },
+            
+            /**
+             * Update language settings in the DOM
+             * @param {string} language - Language code
+             */
+            updateLanguage: (language) => {
+                // Update HTML lang attribute
+                document.documentElement.lang = language;
+                
+                // Update current language display
+                const currentLangSpan = document.getElementById('currentLang');
+                if (currentLangSpan) {
+                    currentLangSpan.textContent = language === 'bn' ? 'বাংলা' : 'English';
+                }
+                
+                // Update check marks in dropdown
+                const bnCheck = document.getElementById('lang-bn-check');
+                const enCheck = document.getElementById('lang-en-check');
+                
+                if (bnCheck) bnCheck.style.display = language === 'bn' ? 'inline' : 'none';
+                if (enCheck) enCheck.style.display = language === 'en' ? 'inline' : 'none';
+                
+                // Update font family based on language
+                document.body.style.fontFamily = language === 'bn' 
+                    ? "'Noto Sans Bengali', sans-serif" 
+                    : "'Noto Sans Bengali', sans-serif"; // Keeping Bengali font for better character support
+            },
+            
+            /**
+             * Refresh UI elements with new language
+             */
+            refreshUI: () => {
+                // Reload menu items and categories with new language
+                if (typeof MenuService !== 'undefined' && MenuService.loadMenuItems) {
+                    MenuService.loadMenuItems().then(() => {
+                        // After loading, update the menu display
+                        LanguageService.updateMenuDisplay();
+                    });
+                }
+                
+                // Update search and filter controls
+                LanguageService.updateSearchAndFilterControls();
+                
+                // Update any static text that needs translation
+                LanguageService.updateStaticText();
+                
+                // Update order modal and order status modal
+                LanguageService.updateOrderModal();
+                LanguageService.updateOrderStatusModal();
+            },
+            
+            /**
+             * Update search and filter controls with new language
+             */
+            updateSearchAndFilterControls: () => {
+                // Update search placeholder
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.placeholder = AppState.currentLanguage === 'bn' ? 'খাবার খুঁজুন...' : 'Search food...';
+                }
+                
+                // Update filter buttons
+                const filterButtons = document.querySelectorAll('.filter-btn');
+                filterButtons.forEach(btn => {
+                    const filter = btn.getAttribute('data-filter');
+                    if (filter) {
+                        const icon = btn.querySelector('i');
+                        const iconHTML = icon ? icon.outerHTML : '';
+                        
+                        switch(filter) {
+                            case 'vegetarian':
+                                btn.innerHTML = iconHTML + (AppState.currentLanguage === 'bn' ? ' সবজি' : ' Vegetarian');
+                                break;
+                            case 'spicy':
+                                btn.innerHTML = iconHTML + (AppState.currentLanguage === 'bn' ? ' ঝাল' : ' Spicy');
+                                break;
+                            case 'popular':
+                                btn.innerHTML = iconHTML + (AppState.currentLanguage === 'bn' ? ' জনপ্রিয়' : ' Popular');
+                                break;
+                            case 'price-low':
+                                btn.innerHTML = iconHTML + (AppState.currentLanguage === 'bn' ? ' কম দাম' : ' Low Price');
+                                break;
+                            case 'price-high':
+                                btn.innerHTML = iconHTML + (AppState.currentLanguage === 'bn' ? ' বেশি দাম' : ' High Price');
+                                break;
+                            case 'available':
+                                btn.innerHTML = iconHTML + (AppState.currentLanguage === 'bn' ? ' পাওয়া যাচ্ছে' : ' Available');
+                                break;
+                        }
+                    }
+                });
+                
+                // Update sort dropdown
+                const sortSelect = document.getElementById('sortSelect');
+                if (sortSelect) {
+                    const options = sortSelect.querySelectorAll('option');
+                    options.forEach(option => {
+                        const value = option.getAttribute('value');
+                        switch(value) {
+                            case 'name':
+                                option.textContent = AppState.currentLanguage === 'bn' ? 'নাম অনুযায়ী' : 'By Name';
+                                break;
+                            case 'price-low':
+                                option.textContent = AppState.currentLanguage === 'bn' ? 'কম দাম অনুযায়ী' : 'Price Low to High';
+                                break;
+                            case 'price-high':
+                                option.textContent = AppState.currentLanguage === 'bn' ? 'বেশি দাম অনুযায়ী' : 'Price High to Low';
+                                break;
+                            case 'popular':
+                                option.textContent = AppState.currentLanguage === 'bn' ? 'জনপ্রিয়তা অনুযায়ী' : 'By Popularity';
+                                break;
+                        }
+                    });
+                }
+                
+                // Update filter section title
+                const filterSectionTitle = document.querySelector('.filter-section-title span');
+                if (filterSectionTitle) {
+                    filterSectionTitle.textContent = AppState.currentLanguage === 'bn' ? 'ফিল্টার করুন' : 'Filter';
+                }
+                
+                // Update category navigation
+                LanguageService.updateCategoryNavigation();
+            },
+            
+            /**
+             * Update category navigation with new language
+             */
+            updateCategoryNavigation: () => {
+                // Update "All" button
+                const allBtn = document.querySelector('.category-nav .category-btn:first-child');
+                if (allBtn) {
+                    allBtn.textContent = AppState.currentLanguage === 'bn' ? 'সব' : 'All';
+                }
+                
+                // Update category buttons
+                const categoryBtns = document.querySelectorAll('.category-nav .category-btn:not(:first-child)');
+                categoryBtns.forEach((btn, index) => {
+                    // Try to get category from AppState first
+                    let category = AppState.categories[index];
+                    
+                    // If not found, try to get category ID from button attribute
+                    if (!category) {
+                        const categoryId = btn.getAttribute('data-category-id');
+                        if (categoryId) {
+                            category = AppState.categories.find(cat => cat.id == categoryId);
+                        }
+                    }
+                    
+                    if (category) {
+                        btn.textContent = AppState.currentLanguage === 'bn' 
+                            ? (category.name_bn || category.name) 
+                            : (category.name || category.name_bn);
+                    }
+                });
+                
+                // If categories are loaded but navigation isn't updated, force re-render
+                if (AppState.categories.length > 0 && categoryBtns.length === 0) {
+                    if (typeof MenuService !== 'undefined' && MenuService.renderCategories) {
+                        MenuService.renderCategories();
+                    }
+                }
+            },
+            
+            /**
+             * Update menu display with new language
+             */
+            updateMenuDisplay: () => {
+                // Re-render menu items with new language if MenuService is available
+                if (typeof MenuService !== 'undefined' && MenuService.renderMenuItems) {
+                    MenuService.renderMenuItems();
+                }
+                
+                // Update section titles
+                const sectionTitles = document.querySelectorAll('.section-title');
+                sectionTitles.forEach((title, index) => {
+                    const category = AppState.categories[index];
+                    if (category) {
+                        title.textContent = AppState.currentLanguage === 'bn' 
+                            ? (category.name_bn || category.name) 
+                            : (category.name || category.name_bn);
+                    }
+                });
+                
+                // Update menu item names and descriptions by scanning existing DOM elements
+                const menuCards = document.querySelectorAll('.menu-card');
+                menuCards.forEach((card, cardIndex) => {
+                    const nameElement = card.querySelector('.menu-name');
+                    const descElement = card.querySelector('.menu-description');
+                    
+                    if (nameElement) {
+                        // Try to find the corresponding menu item
+                        let item = null;
+                        if (AppState.menuItems[cardIndex]) {
+                            item = AppState.menuItems[cardIndex];
+                        } else {
+                            // Fallback: try to find item by other means
+                            const itemId = card.getAttribute('data-item-id');
+                            if (itemId) {
+                                item = AppState.menuItems.find(mi => mi.id == itemId);
+                            }
+                        }
+                        
+                        if (item) {
+                            nameElement.textContent = AppState.currentLanguage === 'bn' 
+                                ? (item.name_bn || item.name) 
+                                : (item.name || item.name_bn);
+                        }
+                    }
+                    
+                    if (descElement) {
+                        // Try to find the corresponding menu item
+                        let item = null;
+                        if (AppState.menuItems[cardIndex]) {
+                            item = AppState.menuItems[cardIndex];
+                        } else {
+                            // Fallback: try to find item by other means
+                            const itemId = card.getAttribute('data-item-id');
+                            if (itemId) {
+                                item = AppState.menuItems.find(mi => mi.id == itemId);
+                            }
+                        }
+                        
+                        if (item) {
+                            descElement.textContent = AppState.currentLanguage === 'bn' 
+                                ? (item.description_bn || item.description || '') 
+                                : (item.description || item.description_bn || '');
+                        }
+                    }
+                });
+                
+                // Update menu badges and tags
+                LanguageService.updateMenuBadgesAndTags();
+            },
+            
+            /**
+             * Update menu badges and tags with new language
+             */
+            updateMenuBadgesAndTags: () => {
+                // Update unavailable badges
+                const unavailableBadges = document.querySelectorAll('.menu-badge:not([style*="warning"])');
+                unavailableBadges.forEach(badge => {
+                    badge.textContent = AppState.currentLanguage === 'bn' ? 'অনুপলব্ধ' : 'Unavailable';
+                });
+                
+                // Update popular badges
+                const popularBadges = document.querySelectorAll('.menu-badge[style*="warning"]');
+                popularBadges.forEach(badge => {
+                    badge.textContent = AppState.currentLanguage === 'bn' ? 'জনপ্রিয়' : 'Popular';
+                });
+                
+                // Update vegetarian tags
+                const vegetarianTags = document.querySelectorAll('.menu-tag.vegetarian');
+                vegetarianTags.forEach(tag => {
+                    const icon = tag.querySelector('i');
+                    const iconHTML = icon ? icon.outerHTML : '';
+                    tag.innerHTML = iconHTML + (AppState.currentLanguage === 'bn' ? ' সবজি' : ' Vegetarian');
+                });
+                
+                // Update spicy tags
+                const spicyTags = document.querySelectorAll('.menu-tag.spicy');
+                spicyTags.forEach(tag => {
+                    const icon = tag.querySelector('i');
+                    const iconHTML = icon ? icon.outerHTML : '';
+                    // We need to determine the spice level from the item data
+                    // For now, we'll update based on current text
+                    const currentText = tag.textContent.trim();
+                    let newText = '';
+                    if (currentText.includes('মৃদু') || currentText.includes('Mild')) {
+                        newText = AppState.currentLanguage === 'bn' ? ' মৃদু ঝাল' : ' Mild';
+                    } else if (currentText.includes('মাঝারি') || currentText.includes('Medium')) {
+                        newText = AppState.currentLanguage === 'bn' ? ' মাঝারি ঝাল' : ' Medium';
+                    } else {
+                        newText = AppState.currentLanguage === 'bn' ? ' ঝাল' : ' Hot';
+                    }
+                    tag.innerHTML = iconHTML + newText;
+                });
+                
+                // Update preparation time tags
+                const timeTags = document.querySelectorAll('.menu-tag .fa-clock').forEach(clockIcon => {
+                    const tag = clockIcon.parentElement;
+                    const timeText = tag.textContent.trim();
+                    const timeMatch = timeText.match(/(\d+)/);
+                    if (timeMatch) {
+                        const time = timeMatch[1];
+                        tag.innerHTML = `<i class="fas fa-clock"></i>${time}${AppState.currentLanguage === 'bn' ? 'মিনিট' : ' min'}`;
+                    }
+                });
+            },
+            
+            /**
+             * Update static text elements based on current language
+             */
+            updateStaticText: () => {
+                const isBengali = AppState.currentLanguage === 'bn';
+                
+                // Update header text
+                const orderHistoryBtn = document.querySelector('#orderHistoryBtn span');
+                if (orderHistoryBtn) {
+                    orderHistoryBtn.textContent = isBengali ? 'অর্ডার ইতিহাস' : 'Order History';
+                }
+                
+                const favoritesBtn = document.querySelector('#favoritesBtn span');
+                if (favoritesBtn) {
+                    favoritesBtn.textContent = isBengali ? 'পছন্দের আইটেম' : 'Favorites';
+                }
+                
+                const branchSelector = document.querySelector('#branchSelector span');
+                if (branchSelector) {
+                    branchSelector.textContent = isBengali ? 'শাখা পরিবর্তন' : 'Change Branch';
+                }
+                
+                // Update dropdown headers
+                const orderHistoryHeader = document.querySelector('#orderHistoryMenu .dropdown-header span');
+                if (orderHistoryHeader) {
+                    orderHistoryHeader.innerHTML = isBengali 
+                        ? '<i class="fas fa-history"></i> অর্ডার ইতিহাস' 
+                        : '<i class="fas fa-history"></i> Order History';
+                }
+                
+                const favoritesHeader = document.querySelector('#favoritesMenu .dropdown-header span');
+                if (favoritesHeader) {
+                    favoritesHeader.innerHTML = isBengali 
+                        ? '<i class="fas fa-heart"></i> পছন্দের আইটেম' 
+                        : '<i class="fas fa-heart"></i> Favorites';
+                }
+                
+                const languageHeader = document.querySelector('#languageMenu .dropdown-header span');
+                if (languageHeader) {
+                    languageHeader.innerHTML = isBengali 
+                        ? '<i class="fas fa-language"></i> ভাষা পরিবর্তন' 
+                        : '<i class="fas fa-language"></i> Change Language';
+                }
+                
+                // Update empty state messages
+                LanguageService.updateEmptyStateMessages();
+            },
+            
+            /**
+             * Update empty state messages
+             */
+            updateEmptyStateMessages: () => {
+                const isBengali = AppState.currentLanguage === 'bn';
+                
+                // Order history empty state
+                const orderHistoryEmpty = document.querySelector('#orderHistoryList .empty-state p');
+                if (orderHistoryEmpty) {
+                    orderHistoryEmpty.textContent = isBengali 
+                        ? 'কোনো অর্ডার ইতিহাস পাওয়া যায়নি' 
+                        : 'No order history found';
+                }
+                
+                // Favorites empty state
+                const favoritesEmpty = document.querySelector('#favoritesList .empty-state p');
+                if (favoritesEmpty) {
+                    favoritesEmpty.textContent = isBengali 
+                        ? 'কোনো পছন্দের আইটেম পাওয়া যায়নি' 
+                        : 'No favorite items found';
+                }
+            },
+            
+            /**
+             * Update order modal with new language
+             */
+            updateOrderModal: () => {
+                const isBengali = AppState.currentLanguage === 'bn';
+                
+                // Debug: Log current language
+                console.log('updateOrderModal called with language:', isBengali ? 'Bengali' : 'English');
+                
+                // Update order modal title
+                const orderModalTitle = document.querySelector('#orderModal .modal-title');
+                if (orderModalTitle) {
+                    orderModalTitle.textContent = isBengali ? 'অর্ডার সম্পন্ন করুন' : 'Complete Order';
+                    console.log('Updated modal title to:', orderModalTitle.textContent);
+                }
+                
+                // Update section titles using data attributes for precise targeting
+                const customerInfoTitle = document.querySelector('#orderForm .section-title[data-section="customer-info"]');
+                if (customerInfoTitle) {
+                    customerInfoTitle.textContent = isBengali ? 'গ্রাহক তথ্য' : 'Customer Information';
+                    console.log('Updated customer info section to:', customerInfoTitle.textContent);
+                }
+                
+                const orderDetailsTitle = document.querySelector('#orderForm .section-title[data-section="order-details"]');
+                if (orderDetailsTitle) {
+                    orderDetailsTitle.textContent = isBengali ? 'অর্ডারের বিবরণ' : 'Order Details';
+                    console.log('Updated order details section to:', orderDetailsTitle.textContent);
+                }
+                
+                const paymentInfoTitle = document.querySelector('#orderForm .section-title[data-section="payment-info"]');
+                if (paymentInfoTitle) {
+                    paymentInfoTitle.textContent = isBengali ? 'পেমেন্ট তথ্য' : 'Payment Information';
+                    console.log('Updated payment info section to:', paymentInfoTitle.textContent);
+                }
+                
+                const additionalInfoTitle = document.querySelector('#orderForm .section-title[data-section="additional-info"]');
+                if (additionalInfoTitle) {
+                    additionalInfoTitle.textContent = isBengali ? 'অতিরিক্ত তথ্য' : 'Additional Information';
+                    console.log('Updated additional info section to:', additionalInfoTitle.textContent);
+                }
+                
+                // Update form labels
+                const nameLabels = document.querySelectorAll('#orderForm label');
+                nameLabels.forEach(label => {
+                    const labelText = label.textContent.replace(':', '').trim();
+                    if (labelText === 'নাম' || labelText === 'Name') {
+                        label.textContent = isBengali ? 'নাম:' : 'Name:';
+                    } else if (labelText === 'ফোন নম্বর' || labelText === 'Phone Number') {
+                        label.textContent = isBengali ? 'ফোন নম্বর:' : 'Phone Number:';
+                    } else if (labelText === 'অর্ডারের বিবরণ' || labelText === 'Order Details') {
+                        label.textContent = isBengali ? 'অর্ডারের বিবরণ:' : 'Order Details:';
+                    } else if (labelText === 'অর্ডারের ধরন' || labelText === 'Order Type') {
+                        label.textContent = isBengali ? 'অর্ডারের ধরন:' : 'Order Type:';
+                    } else if (labelText === 'টেবিল নির্বাচন' || labelText === 'Table Selection') {
+                        label.textContent = isBengali ? 'টেবিল নির্বাচন:' : 'Table Selection:';
+                    } else if (labelText === 'ডেলিভারির ঠিকানা' || labelText === 'Delivery Address') {
+                        label.textContent = isBengali ? 'ডেলিভারির ঠিকানা:' : 'Delivery Address:';
+                    } else if (labelText === 'ঠিকানা' || labelText === 'Address') {
+                        label.textContent = isBengali ? 'ঠিকানা:' : 'Address:';
+                    } else if (labelText === 'এরিয়া' || labelText === 'Area') {
+                        label.textContent = isBengali ? 'এরিয়া:' : 'Area:';
+                    } else if (labelText === 'ল্যান্ডমার্ক' || labelText === 'Landmark') {
+                        label.textContent = isBengali ? 'ল্যান্ডমার্ক:' : 'Landmark:';
+                    } else if (labelText === 'ফ্ল্যাট/হাউস নং' || labelText === 'Flat/House No') {
+                        label.textContent = isBengali ? 'ফ্ল্যাট/হাউস নং:' : 'Flat/House No:';
+                    } else if (labelText === 'পেমেন্ট তথ্য' || labelText === 'Payment Information') {
+                        label.textContent = isBengali ? 'পেমেন্ট তথ্য:' : 'Payment Information:';
+                    } else if (labelText === 'পেমেন্ট পদ্ধতি' || labelText === 'Payment Method') {
+                        label.textContent = isBengali ? 'পেমেন্ট পদ্ধতি:' : 'Payment Method:';
+                    } else if (labelText === 'অতিরিক্ত তথ্য' || labelText === 'Additional Information') {
+                        label.textContent = isBengali ? 'অতিরিক্ত তথ্য:' : 'Additional Information:';
+                    } else if (labelText === 'বিশেষ নির্দেশনা' || labelText === 'Special Instructions') {
+                        label.textContent = isBengali ? 'বিশেষ নির্দেশনা:' : 'Special Instructions:';
+                    }
+                });
+                
+                // Update order type options
+                const orderTypeOptions = document.querySelectorAll('.order-type-option');
+                orderTypeOptions.forEach(option => {
+                    const nameElement = option.querySelector('.order-type-name');
+                    const descElement = option.querySelector('.order-type-desc');
+                    const type = option.getAttribute('data-type');
+                    
+                    if (nameElement && descElement) {
+                        switch(type) {
+                            case 'dine_in':
+                                nameElement.textContent = isBengali ? 'ডাইন-ইন' : 'Dine-in';
+                                descElement.textContent = isBengali ? 'রেস্তোরাঁয় খাবার' : 'Eat at restaurant';
+                                break;
+                            case 'takeaway':
+                                nameElement.textContent = isBengali ? 'টেকঅয়ে' : 'Takeaway';
+                                descElement.textContent = isBengali ? 'নিয়ে যাবেন' : 'Take away';
+                                break;
+                            case 'delivery':
+                                nameElement.textContent = isBengali ? 'ডেলিভারি' : 'Delivery';
+                                descElement.textContent = isBengali ? 'বাসায় ডেলিভারি' : 'Home delivery';
+                                break;
+                        }
+                    }
+                });
+                
+                // Update payment methods
+                const paymentMethods = document.querySelectorAll('.payment-method');
+                paymentMethods.forEach(method => {
+                    const nameElement = method.querySelector('.payment-name');
+                    const descElement = method.querySelector('.payment-desc');
+                    const payment = method.getAttribute('data-payment');
+                    
+                    if (nameElement && descElement) {
+                        switch(payment) {
+                            case 'cash':
+                                nameElement.textContent = isBengali ? 'ক্যাশ' : 'Cash';
+                                descElement.textContent = isBengali ? 'নগদ পেমেন্ট' : 'Cash payment';
+                                break;
+                            case 'card':
+                                nameElement.textContent = isBengali ? 'কার্ড' : 'Card';
+                                descElement.textContent = isBengali ? 'ডেবিট/ক্রেডিট কার্ড' : 'Debit/Credit Card';
+                                break;
+                            case 'bkash':
+                                nameElement.textContent = isBengali ? 'bKash' : 'bKash';
+                                descElement.textContent = isBengali ? 'মোবাইল ব্যাংকিং' : 'Mobile Banking';
+                                break;
+                            case 'nagad':
+                                nameElement.textContent = isBengali ? 'Nagad' : 'Nagad';
+                                descElement.textContent = isBengali ? 'মোবাইল ব্যাংকিং' : 'Mobile Banking';
+                                break;
+                            case 'rocket':
+                                nameElement.textContent = isBengali ? 'Rocket' : 'Rocket';
+                                descElement.textContent = isBengali ? 'মোবাইল ব্যাংকিং' : 'Mobile Banking';
+                                break;
+                        }
+                    }
+                });
+                
+                // Update form placeholders
+                const nameInput = document.getElementById('customerName');
+                if (nameInput) {
+                    nameInput.placeholder = isBengali ? 'আপনার নাম লিখুন' : 'Enter your name';
+                }
+                
+                const phoneInput = document.getElementById('customerPhone');
+                if (phoneInput) {
+                    phoneInput.placeholder = isBengali ? '01XXX-XXXXXX' : '01XXX-XXXXXX';
+                }
+                
+                const addressTextarea = document.getElementById('deliveryAddress');
+                if (addressTextarea) {
+                    addressTextarea.placeholder = isBengali ? 'সম্পূর্ণ ঠিকানা লিখুন' : 'Enter full address';
+                }
+                
+                const areaInput = document.getElementById('deliveryArea');
+                if (areaInput) {
+                    areaInput.placeholder = isBengali ? 'এরিয়ার নাম' : 'Area name';
+                }
+                
+                const landmarkInput = document.getElementById('deliveryLandmark');
+                if (landmarkInput) {
+                    landmarkInput.placeholder = isBengali ? 'নিকটবর্তী ল্যান্ডমার্ক' : 'Nearby landmark';
+                }
+                
+                const flatInput = document.getElementById('deliveryFlat');
+                if (flatInput) {
+                    flatInput.placeholder = isBengali ? 'ফ্ল্যাট বা হাউস নম্বর' : 'Flat or house number';
+                }
+                
+                const notesTextarea = document.getElementById('orderNotes');
+                if (notesTextarea) {
+                    notesTextarea.placeholder = isBengali ? 'কোনো বিশেষ নির্দেশনা থাকলে লিখুন...' : 'Any special instructions...';
+                }
+                
+                // Update form action buttons
+                const cancelBtn = document.getElementById('cancelOrder');
+                if (cancelBtn) {
+                    cancelBtn.textContent = isBengali ? 'বাতিল করুন' : 'Cancel';
+                }
+                
+                const submitBtn = document.querySelector('#orderForm button[type="submit"]');
+                if (submitBtn) {
+                    const icon = submitBtn.querySelector('i');
+                    const iconHTML = icon ? icon.outerHTML : '';
+                    submitBtn.innerHTML = iconHTML + (isBengali ? ' অর্ডার সম্পন্ন করুন' : ' Complete Order');
+                }
+                
+                // Update table loading text
+                const tableLoading = document.querySelector('.table-loading');
+                if (tableLoading) {
+                    tableLoading.innerHTML = isBengali 
+                        ? '<i class="fas fa-spinner fa-spin"></i> টেবিল লোড হচ্ছে...' 
+                        : '<i class="fas fa-spinner fa-spin"></i> Loading tables...';
+                }
+            },
+            
+            /**
+             * Update order status modal with new language
+             */
+            updateOrderStatusModal: () => {
+                const isBengali = AppState.currentLanguage === 'bn';
+                
+                // Update order status modal title
+                const statusModalTitle = document.querySelector('#orderStatusModal .modal-title');
+                if (statusModalTitle) {
+                    statusModalTitle.textContent = isBengali ? 'অর্ডার স্ট্যাটাস' : 'Order Status';
+                }
+                
+                // Update order info
+                const orderInfoTitle = document.querySelector('#orderStatusModal .order-info h4');
+                if (orderInfoTitle) {
+                    const orderNumber = document.getElementById('orderNumber').textContent;
+                    orderInfoTitle.innerHTML = isBengali ? `অর্ডার #<span id="orderNumber">${orderNumber}</span>` : `Order #<span id="orderNumber">${orderNumber}</span>`;
+                }
+                
+                // Update preparation time section
+                const preparationTimeLabel = document.querySelector('#orderStatusModal .preparation-time > div:first-child');
+                if (preparationTimeLabel) {
+                    preparationTimeLabel.textContent = isBengali ? 'প্রস্তুতের সময়' : 'Preparation Time';
+                }
+                
+                const preparationStatus = document.getElementById('preparationStatus');
+                if (preparationStatus) {
+                    const currentText = preparationStatus.textContent;
+                    if (currentText.includes('প্রস্তুত হচ্ছে') || currentText.includes('Preparing')) {
+                        preparationStatus.textContent = isBengali ? 'প্রস্তুত হচ্ছে...' : 'Preparing...';
+                    } else if (currentText.includes('প্রস্তুত') || currentText.includes('Ready')) {
+                        preparationStatus.textContent = isBengali ? 'প্রস্তুত!' : 'Ready!';
+                    } else if (currentText.includes('সম্পন্ন') || currentText.includes('Completed')) {
+                        preparationStatus.textContent = isBengali ? 'সম্পন্ন!' : 'Completed!';
+                    }
+                }
+                
+                // Update status timeline
+                const statusSteps = document.querySelectorAll('#orderStatusModal .status-step .status-title');
+                statusSteps.forEach(step => {
+                    const currentText = step.textContent.trim();
+                    if (currentText === 'অর্ডার গৃহীত' || currentText === 'Order Received') {
+                        step.textContent = isBengali ? 'অর্ডার গৃহীত' : 'Order Received';
+                    } else if (currentText === 'অর্ডার নিশ্চিত' || currentText === 'Order Confirmed') {
+                        step.textContent = isBengali ? 'অর্ডার নিশ্চিত' : 'Order Confirmed';
+                    } else if (currentText === 'প্রস্তুত হচ্ছে' || currentText === 'Preparing') {
+                        step.textContent = isBengali ? 'প্রস্তুত হচ্ছে' : 'Preparing';
+                    } else if (currentText === 'প্রস্তুত' || currentText === 'Ready') {
+                        step.textContent = isBengali ? 'প্রস্তুত' : 'Ready';
+                    } else if (currentText === 'পরিবেশিত' || currentText === 'Served') {
+                        step.textContent = isBengali ? 'পরিবেশিত' : 'Served';
+                    }
+                });
+                
+                // Update order items section title
+                const orderItemsTitle = document.querySelector('#orderStatusModal .order-items-title');
+                if (orderItemsTitle) {
+                    const icon = orderItemsTitle.querySelector('i');
+                    const iconHTML = icon ? icon.outerHTML : '';
+                    orderItemsTitle.innerHTML = iconHTML + (isBengali ? ' অর্ডারকৃত আইটেম' : ' Ordered Items');
+                }
+            },
+            
+            /**
+             * Get text based on current language
+             * @param {string} bnText - Bengali text
+             * @param {string} enText - English text
+             * @returns {string} Text in current language
+             */
+            getText: (bnText, enText) => {
+                return AppState.currentLanguage === 'bn' ? bnText : enText;
+            }
+        };
+        
+        // Global function for language switching (called from HTML)
+        function setLanguage(language) {
+            LanguageService.setLanguage(language);
+            // Close the dropdown
+            const languageMenu = document.getElementById('languageMenu');
+            if (languageMenu) {
+                languageMenu.classList.remove('show');
+            }
+        }
         
         // API Service
         const ApiService = {
@@ -4479,13 +5827,17 @@
                 container.innerHTML = '';
                 
                 if (!AppState.menuItems || AppState.menuItems.length === 0) {
+                    const emptyTitle = AppState.currentLanguage === 'bn' ? 'কোনো মেনু আইটেম পাওয়া যায়নি' : 'No Menu Items Found';
+                    const emptyDesc = AppState.currentLanguage === 'bn' ? 'এই শাখার জন্য কোনো মেনু আইটেম উপলব্ধ নেই' : 'No menu items available for this branch';
+                    const retryBtn = AppState.currentLanguage === 'bn' ? 'পুনরায় চেষ্টা করুন' : 'Retry';
+                    
                     container.innerHTML = `
                         <div class="col-12 text-center p-5">
                             <i class="fas fa-utensils fa-3x text-muted mb-3"></i>
-                            <h3 class="text-muted">কোনো মেনু আইটেম পাওয়া যায়নি</h3>
-                            <p class="text-muted">এই শাখার জন্য কোনো মেনু আইটেম উপলব্ধ নেই</p>
+                            <h3 class="text-muted">${emptyTitle}</h3>
+                            <p class="text-muted">${emptyDesc}</p>
                             <button class="btn btn-outline-primary" onclick="MenuService.loadMenuItems()">
-                                <i class="fas fa-sync-alt"></i> পুনরায় চেষ্টা করুন
+                                <i class="fas fa-sync-alt"></i> ${retryBtn}
                             </button>
                         </div>
                     `;
@@ -4495,13 +5847,17 @@
                 const filteredItems = MenuService.filterMenuItems();
                 
                 if (filteredItems.length === 0) {
+                    const noItemsTitle = AppState.currentLanguage === 'bn' ? 'কোনো আইটেম পাওয়া যায়নি' : 'No Items Found';
+                    const noItemsDesc = AppState.currentLanguage === 'bn' ? 'অন্য ফিল্টার বা সার্চ টার্ম চেষ্টা করুন' : 'Try other filters or search terms';
+                    const clearFiltersBtn = AppState.currentLanguage === 'bn' ? 'ফিল্টার সাফ করুন' : 'Clear Filters';
+                    
                     container.innerHTML = `
                         <div class="col-12 text-center p-5">
                             <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                            <h3 class="text-muted">কোনো আইটেম পাওয়া যায়নি</h3>
-                            <p class="text-muted">অন্য ফিল্টার বা সার্চ টার্ম চেষ্টা করুন</p>
+                            <h3 class="text-muted">${noItemsTitle}</h3>
+                            <p class="text-muted">${noItemsDesc}</p>
                             <button class="btn btn-outline-primary" onclick="MenuService.clearFilters()">
-                                <i class="fas fa-times"></i> ফিল্টার সাফ করুন
+                                <i class="fas fa-times"></i> ${clearFiltersBtn}
                             </button>
                         </div>
                     `;
@@ -4779,7 +6135,17 @@
                     if (response.data && Array.isArray(response.data)) {
                         AppState.menuItems = response.data;
                         console.log('Loaded', AppState.menuItems.length, 'menu items');
+                        
+                        // Render menu items
                         UIService.renderMenuItems();
+                        
+                        // After rendering, update language if needed
+                        setTimeout(() => {
+                            if (AppState.currentLanguage === 'en') {
+                                LanguageService.updateMenuDisplay();
+                                LanguageService.updateCategoryNavigation();
+                            }
+                        }, 50);
                     } else {
                         console.error('Invalid menu items data format:', response);
                         const container = document.getElementById('menuContainer');
@@ -4802,12 +6168,17 @@
                 // Apply search filter
                 if (AppState.currentFilters.search) {
                     const searchTerm = AppState.currentFilters.search.toLowerCase();
-                    filtered = filtered.filter(item => 
-                        item.name.toLowerCase().includes(searchTerm) ||
-                        item.name_bn.toLowerCase().includes(searchTerm) ||
-                        item.description.toLowerCase().includes(searchTerm) ||
-                        item.description_bn.toLowerCase().includes(searchTerm)
-                    );
+                    filtered = filtered.filter(item => {
+                        const nameToSearch = AppState.currentLanguage === 'bn' 
+                            ? (item.name_bn || item.name) 
+                            : (item.name || item.name_bn);
+                        const descriptionToSearch = AppState.currentLanguage === 'bn' 
+                            ? (item.description_bn || item.description || '') 
+                            : (item.description || item.description_bn || '');
+                        
+                        return nameToSearch.toLowerCase().includes(searchTerm) ||
+                               descriptionToSearch.toLowerCase().includes(searchTerm);
+                    });
                 }
                 
                 // Apply price filter
@@ -5740,6 +7111,7 @@
                 
                 // Clear hidden inputs
                 document.getElementById('selectedTable').value = '';
+                document.getElementById('selectedPaymentMethod').value = '';
                 
                 AppState.selectedPaymentMethod = '';
             },
@@ -5788,6 +7160,9 @@
                 this.updatePreparationTime(preparationTime.remainingSeconds);
                 
                 UIService.showModal('orderStatusModal');
+                
+                // Update order status modal language
+                LanguageService.updateOrderStatusModal();
                 
                 // Start status updates for active orders
                 if (orderData.status !== 'completed' && orderData.status !== 'cancelled') {
@@ -6232,45 +7607,133 @@
                     e.stopPropagation();
                 });
                 
-                // Cart toggle
-                document.getElementById('cartToggle').addEventListener('click', () => {
-                    UIService.toggleCart();
-                });
+                // Cart toggle with enhanced debugging
+                const cartToggle = document.getElementById('cartToggle');
+                const cartSidebar = document.getElementById('cartSidebar');
                 
-                document.getElementById('closeCart').addEventListener('click', () => {
-                    UIService.toggleCart();
-                });
+                console.log('Cart toggle element found:', cartToggle);
+                console.log('Cart sidebar element found:', cartSidebar);
                 
-                // Checkout button
-                document.getElementById('checkoutBtn').addEventListener('click', () => {
-                    if (AppState.cart.length === 0) {
-                        UIService.showToast('কার্ট খালি', 'error');
-                        return;
-                    }
+                if (cartToggle) {
+                    cartToggle.addEventListener('click', () => {
+                        console.log('Cart toggle clicked!');
+                        if (typeof UIService.toggleCart === 'function') {
+                            UIService.toggleCart();
+                        } else {
+                            console.error('UIService.toggleCart is not a function');
+                        }
+                    });
+                } else {
+                    console.error('Cart toggle element not found!');
+                }
+                
+                const closeCart = document.getElementById('closeCart');
+                if (closeCart) {
+                    closeCart.addEventListener('click', () => {
+                        console.log('Close cart clicked!');
+                        if (typeof UIService.toggleCart === 'function') {
+                            UIService.toggleCart();
+                        } else {
+                            console.error('UIService.toggleCart is not a function');
+                        }
+                    });
+                } else {
+                    console.error('Close cart element not found!');
+                }
+                
+                // Checkout button with enhanced debugging
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                console.log('Checkout button element found:', checkoutBtn);
+                
+                if (checkoutBtn) {
+                    checkoutBtn.addEventListener('click', () => {
+                        console.log('Checkout button clicked!');
+                        console.log('Cart length:', AppState.cart.length);
+                        
+                        if (AppState.cart.length === 0) {
+                            console.log('Cart is empty, showing toast');
+                            UIService.showToast('কার্ট খালি', 'error');
+                            return;
+                        }
+                        
+                        console.log('Initializing order modal...');
+                        // Initialize order modal
+                        if (typeof OrderService.resetOrderForm === 'function') {
+                            OrderService.resetOrderForm();
+                        } else {
+                            console.error('OrderService.resetOrderForm is not a function');
+                            return;
+                        }
+                        
+                        // Load tables if dine-in is default
+                        const orderTypeInput = document.getElementById('orderType');
+                        if (orderTypeInput && orderTypeInput.value === 'dine_in') {
+                            console.log('Loading tables for dine-in...');
+                            if (typeof OrderService.loadTables === 'function') {
+                                OrderService.loadTables();
+                            } else {
+                                console.error('OrderService.loadTables is not a function');
+                            }
+                        }
+                        
+                        const customerNameInput = document.getElementById('customerName');
+                        const customerPhoneInput = document.getElementById('customerPhone');
+                        
+                        if (customerNameInput) {
+                            customerNameInput.value = localStorage.getItem('customerName') || '';
+                            console.log('Set customer name:', customerNameInput.value);
+                        }
+                        
+                        if (customerPhoneInput) {
+                            customerPhoneInput.value = localStorage.getItem('customerPhone') || '';
+                            console.log('Set customer phone:', customerPhoneInput.value);
+                        }
+        
+                        console.log('Showing order modal...');
+                        if (typeof UIService.showModal === 'function') {
+                            UIService.showModal('orderModal');
+                        } else {
+                            console.error('UIService.showModal is not a function');
+                            return;
+                        }
+                        
+                        // Update order modal language
+                        if (typeof LanguageService.updateOrderModal === 'function') {
+                            LanguageService.updateOrderModal();
+                        } else {
+                            console.error('LanguageService.updateOrderModal is not a function');
+                        }
+                        
+                        console.log('Checkout button processing completed');
+                    });
                     
-                    // Initialize order modal
-                    OrderService.resetOrderForm();
-                    
-                    // Load tables if dine-in is default
-                    if (document.getElementById('orderType').value === 'dine_in') {
-                        EventListeners.loadTables();
-                    }
-                     document.getElementById('customerName').value = localStorage.getItem('customerName') || '';
-                     document.getElementById('customerPhone').value = localStorage.getItem('customerPhone') || '';
-    
-                    UIService.showModal('orderModal');
-                });
+                    // Ensure button is clickable
+                    checkoutBtn.style.cursor = 'pointer';
+                    console.log('Checkout button event listener setup completed');
+                } else {
+                    console.error('Checkout button element not found!');
+                }
                 
                 // Order form
                 document.getElementById('orderForm').addEventListener('submit', OrderService.submitOrder.bind(OrderService));
                 
-                // Payment methods
-                document.querySelectorAll('.payment-method').forEach(method => {
+                  // Payment methods with enhanced feedback and debugging
+                const paymentMethods = document.querySelectorAll('.payment-method');
+                console.log('Found payment methods:', paymentMethods.length);
+                paymentMethods.forEach((method, index) => {
+                    console.log(`Setting up payment method ${index}:`, method.dataset.payment);
                     method.addEventListener('click', (e) => {
-                        document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-                        e.currentTarget.classList.add('selected');
-                        AppState.selectedPaymentMethod = e.currentTarget.dataset.payment;
+                        console.log('Payment method clicked:', e.currentTarget.dataset.payment);
+                        console.log('Event object:', e);
+                        console.log('Current target:', e.currentTarget);
+                        if (typeof EventListeners.selectPaymentMethod === 'function') {
+                            EventListeners.selectPaymentMethod(e.currentTarget, e);
+                        } else {
+                            console.error('EventListeners.selectPaymentMethod is not a function');
+                        }
                     });
+                    // Test if the element is clickable
+                    method.style.cursor = 'pointer';
                 });
                 
                 // Modal close buttons
@@ -6283,21 +7746,48 @@
                     UIService.hideModal('orderModal');
                 });
                 
-                // Order type selection
-                document.querySelectorAll('.order-type-option').forEach(option => {
+                // Order type selection - enhanced debugging and error handling
+                const orderTypeOptions = document.querySelectorAll('.order-type-option');
+                console.log('Found order type options:', orderTypeOptions.length);
+                orderTypeOptions.forEach((option, index) => {
+                    console.log(`Setting up order type option ${index}:`, option.dataset.type);
                     option.addEventListener('click', (e) => {
+                        console.log('Order type clicked:', e.currentTarget.dataset.type);
+                        console.log('Event object:', e);
+                        console.log('Current target:', e.currentTarget);
                         const orderType = e.currentTarget.dataset.type;
-                        this.selectOrderType(orderType);
+                        if (typeof EventListeners.selectOrderType === 'function') {
+                            EventListeners.selectOrderType(orderType, e);
+                        } else {
+                            console.error('EventListeners.selectOrderType is not a function');
+                        }
                     });
+                    // Test if the element is clickable
+                    option.style.cursor = 'pointer';
                 });
                 
-                // Table selection
-                document.getElementById('tableGrid').addEventListener('click', (e) => {
-                    const tableItem = e.target.closest('.table-item');
-                    if (tableItem && !tableItem.classList.contains('occupied') && !tableItem.classList.contains('reserved')) {
-                        this.selectTable(tableItem);
-                    }
-                });
+                // Table selection with enhanced feedback and debugging
+                const tableGrid = document.getElementById('tableGrid');
+                if (tableGrid) {
+                    console.log('Found table grid element');
+                    tableGrid.addEventListener('click', (e) => {
+                        console.log('Table grid clicked');
+                        const tableItem = e.target.closest('.table-item');
+                        console.log('Table item found:', tableItem);
+                        if (tableItem && !tableItem.classList.contains('occupied') && !tableItem.classList.contains('reserved')) {
+                            console.log('Table item is available, selecting...');
+                            if (typeof EventListeners.selectTable === 'function') {
+                                EventListeners.selectTable(tableItem, e);
+                            } else {
+                                console.error('EventListeners.selectTable is not a function');
+                            }
+                        } else {
+                            console.log('Table item is not available or not found');
+                        }
+                    });
+                } else {
+                    console.error('Table grid element not found');
+                }
                 
                 document.getElementById('closeCustomization').addEventListener('click', () => {
                     UIService.hideModal('customizationModal');
@@ -6371,18 +7861,45 @@
             },
             
             /**
-             * Select order type
+             * Select order type with enhanced animations
              * @param {string} orderType - Order type (dine_in, takeaway, delivery)
+             * @param {Event} event - The click event
              */
-            selectOrderType(orderType) {
-                // Update visual selection
-                document.querySelectorAll('.order-type-option').forEach(option => {
-                    option.classList.remove('selected');
-                });
-                document.querySelector(`[data-type="${orderType}"]`).classList.add('selected');
+            selectOrderType(orderType, event) {
+                console.log('selectOrderType called with:', orderType);
+                console.log('Event object received:', event);
+                console.log('this context:', this);
                 
+                // Add ripple effect
+                const selectedOption = document.querySelector(`[data-type="${orderType}"]`);
+                if (selectedOption && event) {
+                    console.log('Creating ripple effect for:', orderType);
+                    this.createRippleEffect(selectedOption, event);
+                }
+
+                // Update visual selection with animation
+                document.querySelectorAll('.order-type-option').forEach(option => {
+                    if (option.dataset.type === orderType) {
+                        option.classList.add('selected');
+                        console.log('Added selected class to:', option.dataset.type);
+                        // Add a subtle bounce animation
+                        option.style.animation = 'bounce 0.4s var(--bounce)';
+                        setTimeout(() => {
+                            option.style.animation = '';
+                        }, 400);
+                    } else {
+                        option.classList.remove('selected');
+                    }
+                });
+
                 // Update hidden input
-                document.getElementById('orderType').value = orderType;
+                const orderTypeInput = document.getElementById('orderType');
+                if (orderTypeInput) {
+                    orderTypeInput.value = orderType;
+                    console.log('Updated orderType input to:', orderType);
+                } else {
+                    console.error('orderType input not found');
+                }
                 
                 // Show/hide sections based on order type
                 const tableSection = document.getElementById('tableSection');
@@ -6391,7 +7908,7 @@
                 if (orderType === 'dine_in') {
                     tableSection.style.display = 'block';
                     deliverySection.style.display = 'none';
-                    this.loadTables();
+                    OrderService.loadTables();
                 } else if (orderType === 'delivery') {
                     tableSection.style.display = 'none';
                     deliverySection.style.display = 'block';
@@ -6451,22 +7968,7 @@
                 `).join('');
             },
             
-            /**
-             * Select a table
-             * @param {HTMLElement} tableItem - Table element
-             */
-            selectTable(tableItem) {
-                // Remove previous selection
-                document.querySelectorAll('.table-item').forEach(item => {
-                    item.classList.remove('selected');
-                });
-                
-                // Add selection to clicked table
-                tableItem.classList.add('selected');
-                
-                // Update hidden input
-                document.getElementById('selectedTable').value = tableItem.dataset.tableId;
-            }
+  
         };
         
         // Application Initialization
@@ -6517,11 +8019,46 @@
                         // Continue without branches
                     }
                     
-                    // Setup event listeners
+                    // Setup event listeners with enhanced debugging and fallback
                     try {
+                        console.log('Setting up event listeners...');
                         EventListeners.setup();
+                        console.log('Event listeners setup completed');
                     } catch (error) {
                         console.error('Error setting up event listeners:', error);
+                        
+                        // Fallback: setup critical event listeners manually
+                        setTimeout(() => {
+                            console.log('Setting up fallback event listeners...');
+                            
+                            // Setup checkout button manually
+                            const checkoutBtn = document.getElementById('checkoutBtn');
+                            if (checkoutBtn && !checkoutBtn.hasAttribute('data-listener-attached')) {
+                                console.log('Setting up fallback checkout button listener');
+                                checkoutBtn.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('Fallback checkout button clicked!');
+                                    handleCheckout();
+                                });
+                                checkoutBtn.setAttribute('data-listener-attached', 'true');
+                                checkoutBtn.style.cursor = 'pointer';
+                            }
+                            
+                            // Setup cart toggle manually
+                            const cartToggle = document.getElementById('cartToggle');
+                            if (cartToggle && !cartToggle.hasAttribute('data-listener-attached')) {
+                                console.log('Setting up fallback cart toggle listener');
+                                cartToggle.addEventListener('click', () => {
+                                    if (typeof UIService.toggleCart === 'function') {
+                                        UIService.toggleCart();
+                                    }
+                                });
+                                cartToggle.setAttribute('data-listener-attached', 'true');
+                            }
+                            
+                            console.log('Fallback event listeners setup completed');
+                        }, 1000); // Wait 1 second before setting up fallbacks
                     }
                     
                     // Update UI
@@ -6558,6 +8095,132 @@
             },
             
             /**
+             * Create ripple effect for better user feedback
+             * @param {HTMLElement} element - Element to create ripple on
+             * @param {Event} event - The click event
+             */
+            createRippleEffect(element, event) {
+                const ripple = document.createElement('span');
+                const rect = element.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = event.clientX - rect.left - size / 2;
+                const y = event.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    border-radius: 50%;
+                    background: rgba(220, 38, 38, 0.3);
+                    left: ${x}px;
+                    top: ${y}px;
+                    pointer-events: none;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                `;
+                
+                element.style.position = 'relative';
+                element.style.overflow = 'hidden';
+                element.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            },
+            
+            /**
+             * Enhanced table selection with visual feedback
+             * @param {HTMLElement} tableItem - Selected table item
+             * @param {Event} event - The click event
+             */
+            selectTable(tableItem, event) {
+                console.log('selectTable called with:', tableItem);
+                console.log('Event object received:', event);
+                console.log('this context:', this);
+                console.log('Table dataset:', tableItem.dataset);
+                
+                // Add ripple effect
+                if (event) {
+                    console.log('Creating ripple effect for table:', tableItem.dataset.tableId);
+                    this.createRippleEffect(tableItem, event);
+                }
+                
+                // Remove previous selection
+                document.querySelectorAll('.table-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                
+                // Add selection with animation
+                tableItem.classList.add('selected');
+                tableItem.style.animation = 'bounce 0.4s var(--bounce)';
+                setTimeout(() => {
+                    tableItem.style.animation = '';
+                }, 400);
+                
+                // Update hidden input
+                const selectedTableInput = document.getElementById('selectedTable');
+                if (selectedTableInput) {
+                    selectedTableInput.value = tableItem.dataset.tableId;
+                    console.log('Updated selectedTable input to:', tableItem.dataset.tableId);
+                } else {
+                    console.error('selectedTable input not found');
+                }
+                
+                // Provide haptic feedback on mobile devices
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            },
+            
+            /**
+             * Enhanced payment method selection
+             * @param {HTMLElement} paymentMethod - Selected payment method
+             * @param {Event} event - The click event
+             */
+            selectPaymentMethod(paymentMethod, event) {
+                console.log('selectPaymentMethod called with:', paymentMethod.dataset.payment);
+                console.log('Event object received:', event);
+                console.log('this context:', this);
+                
+                // Add ripple effect
+                if (event) {
+                    console.log('Creating ripple effect for payment method:', paymentMethod.dataset.payment);
+                    this.createRippleEffect(paymentMethod, event);
+                }
+                
+                // Remove previous selection
+                document.querySelectorAll('.payment-method').forEach(method => {
+                    method.classList.remove('selected');
+                });
+                
+                // Add selection with animation
+                paymentMethod.classList.add('selected');
+                console.log('Added selected class to payment method:', paymentMethod.dataset.payment);
+                paymentMethod.style.animation = 'bounce 0.4s var(--bounce)';
+                setTimeout(() => {
+                    paymentMethod.style.animation = '';
+                }, 400);
+                
+                // Update state
+                AppState.selectedPaymentMethod = paymentMethod.dataset.payment;
+                console.log('Updated AppState.selectedPaymentMethod to:', AppState.selectedPaymentMethod);
+                
+                // Update hidden input
+                const paymentMethodInput = document.getElementById('selectedPaymentMethod');
+                if (paymentMethodInput) {
+                    paymentMethodInput.value = paymentMethod.dataset.payment;
+                    console.log('Updated selectedPaymentMethod input to:', paymentMethod.dataset.payment);
+                } else {
+                    console.error('selectedPaymentMethod input not found');
+                }
+                
+                // Provide haptic feedback on mobile devices
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            },
+            
+            /**
              * Cleanup function to stop intervals when page is closed
              */
             cleanup() {
@@ -6570,9 +8233,101 @@
             }
         };
         
+        // Global checkout handler as fallback
+        function handleCheckout() {
+            console.log('Global handleCheckout called!');
+            
+            if (typeof AppState === 'undefined') {
+                console.error('AppState is not defined');
+                alert('অ্যাপ্লিকেশন লোড হচ্ছে, অনুগ্রহ করে কিছুক্ষণ পরে আবার চেষ্টা করুন');
+                return;
+            }
+            
+            console.log('Cart length:', AppState.cart.length);
+            
+            if (AppState.cart.length === 0) {
+                console.log('Cart is empty');
+                if (typeof UIService !== 'undefined' && UIService.showToast) {
+                    UIService.showToast('কার্ট খালি', 'error');
+                } else {
+                    alert('কার্ট খালি');
+                }
+                return;
+            }
+            
+            console.log('Processing checkout...');
+            
+            // Initialize order modal
+            if (typeof OrderService !== 'undefined' && OrderService.resetOrderForm) {
+                OrderService.resetOrderForm();
+            } else {
+                console.error('OrderService.resetOrderForm is not available');
+                alert('অর্ডার সিস্টেম প্রস্তুত নয়, অনুগ্রহ করে পৃষ্ঠা রিফ্রেশ করুন');
+                return;
+            }
+            
+            // Load tables if dine-in is default
+            const orderTypeInput = document.getElementById('orderType');
+            if (orderTypeInput && orderTypeInput.value === 'dine_in') {
+                console.log('Loading tables for dine-in...');
+                if (typeof OrderService.loadTables === 'function') {
+                    OrderService.loadTables();
+                } else {
+                    console.error('OrderService.loadTables is not available');
+                }
+            }
+            
+            const customerNameInput = document.getElementById('customerName');
+            const customerPhoneInput = document.getElementById('customerPhone');
+            
+            if (customerNameInput) {
+                customerNameInput.value = localStorage.getItem('customerName') || '';
+                console.log('Set customer name:', customerNameInput.value);
+            }
+            
+            if (customerPhoneInput) {
+                customerPhoneInput.value = localStorage.getItem('customerPhone') || '';
+                console.log('Set customer phone:', customerPhoneInput.value);
+            }
+
+            console.log('Showing order modal...');
+            if (typeof UIService !== 'undefined' && UIService.showModal) {
+                UIService.showModal('orderModal');
+            } else {
+                console.error('UIService.showModal is not available');
+                alert('মোডাল সিস্টেম প্রস্তুত নয়, অনুগ্রহ করে পৃষ্ঠা রিফ্রেশ করুন');
+                return;
+            }
+            
+            // Update order modal language
+            if (typeof LanguageService !== 'undefined' && LanguageService.updateOrderModal) {
+                LanguageService.updateOrderModal();
+            } else {
+                console.error('LanguageService.updateOrderModal is not available');
+            }
+            
+            console.log('Global checkout handler completed');
+        }
+        
         // Initialize application when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             App.initialize();
+            
+            // Initialize language service
+            LanguageService.init();
+            
+            // Second attempt to update language after a longer delay to catch any late-loaded content
+            setTimeout(() => {
+                if (AppState.currentLanguage === 'en') {
+                    LanguageService.updateLanguage('en');
+                    LanguageService.updateSearchAndFilterControls();
+                    LanguageService.updateStaticText();
+                    LanguageService.updateMenuDisplay();
+                    LanguageService.updateCategoryNavigation();
+                    LanguageService.updateOrderModal();
+                    LanguageService.updateOrderStatusModal();
+                }
+            }, 500);
             
             // Fallback: Hide loading screen after 10 seconds even if initialization fails
             setTimeout(() => {
