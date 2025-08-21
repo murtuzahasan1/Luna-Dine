@@ -1061,142 +1061,925 @@
             transform: scale(1.2) rotate(10deg);
         }
         
-        /* Order Status Styles */
+        /* Order Status Styles - Enhanced */
         .order-status {
             padding: var(--spacing-xs) var(--spacing-md);
             border-radius: var(--radius-xl);
             font-size: 0.8rem;
             font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .order-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left var(--transition-normal);
+        }
+        
+        .order-status:hover::before {
+            left: 100%;
+        }
+        
+        .order-status:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
         
         .order-status.pending {
-            background: #fef3c7;
-            color: var(--warning-color);
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border: 1px solid #fbbf24;
         }
         
         .order-status.confirmed {
-            background: #dbeafe;
-            color: #2563eb;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1e40af;
+            border: 1px solid #60a5fa;
         }
         
         .order-status.preparing {
-            background: #e0e7ff;
-            color: #4f46e5;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            color: #3730a3;
+            border: 1px solid #818cf8;
         }
         
         .order-status.ready {
-            background: #d1fae5;
-            color: var(--success-color);
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border: 1px solid #34d399;
         }
         
         .order-status.served {
-            background: #e0e7ff;
-            color: #4f46e5;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            color: #3730a3;
+            border: 1px solid #818cf8;
         }
         
         .order-status.completed {
-            background: #dcfce7;
-            color: var(--success-color);
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: #166534;
+            border: 1px solid #4ade80;
         }
         
         .order-status.cancelled {
-            background: #fee2e2;
-            color: var(--danger-color);
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+            border: 1px solid #f87171;
         }
         
-        /* Order Items Display */
+        /* Order Status Modal - Responsive Design */
+        
+        /* Large Desktop (1400px and above) */
+        @media (min-width: 1400px) {
+            .status-content {
+                max-width: 700px;
+                padding: var(--spacing-2xl) var(--spacing-3xl);
+            }
+            
+            .order-info h4 {
+                font-size: 1.8rem;
+            }
+            
+            .order-info p {
+                font-size: 1rem;
+            }
+            
+            .status-timeline {
+                margin: var(--spacing-3xl) 0;
+            }
+            
+            .status-step {
+                padding-left: 80px;
+                margin-bottom: var(--spacing-xl);
+            }
+            
+            .status-step::before {
+                left: 20px;
+                width: 24px;
+                height: 24px;
+            }
+            
+            .status-step.completed::after {
+                left: 26px;
+                top: 14px;
+                font-size: 14px;
+            }
+            
+            .status-timeline::before {
+                left: 32px;
+                width: 4px;
+            }
+            
+            .status-title {
+                font-size: 1.1rem;
+            }
+            
+            .time-remaining {
+                font-size: 3rem;
+            }
+            
+            .order-items-section {
+                margin-top: var(--spacing-3xl);
+                padding-top: var(--spacing-3xl);
+            }
+            
+            .order-items-title {
+                font-size: 1.4rem;
+            }
+            
+            .order-item {
+                padding: var(--spacing-lg);
+            }
+            
+            .order-item-image-container {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        
+        /* Desktop (1200px - 1399px) */
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .status-content {
+                max-width: 650px;
+                padding: var(--spacing-2xl) var(--spacing-2xl);
+            }
+            
+            .order-info h4 {
+                font-size: 1.6rem;
+            }
+            
+            .status-step {
+                padding-left: 70px;
+            }
+            
+            .status-step::before {
+                left: 16px;
+                width: 22px;
+                height: 22px;
+            }
+            
+            .status-step.completed::after {
+                left: 22px;
+                top: 13px;
+                font-size: 13px;
+            }
+            
+            .status-timeline::before {
+                left: 27px;
+            }
+            
+            .time-remaining {
+                font-size: 2.8rem;
+            }
+        }
+        
+        /* Tablet (768px - 1199px) */
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .status-content {
+                max-width: 90%;
+                width: 90%;
+                padding: var(--spacing-xl) var(--spacing-xl);
+                margin: var(--spacing-md);
+            }
+            
+            .order-info {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .order-info h4 {
+                font-size: 1.4rem;
+            }
+            
+            .order-info p {
+                font-size: 0.9rem;
+            }
+            
+            .status-timeline {
+                margin: var(--spacing-xl) 0;
+                padding: var(--spacing-md) 0;
+            }
+            
+            .status-step {
+                padding-left: 60px;
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .status-step::before {
+                left: 15px;
+                width: 20px;
+                height: 20px;
+            }
+            
+            .status-step.completed::after {
+                left: 20px;
+                top: 12px;
+                font-size: 12px;
+            }
+            
+            .status-timeline::before {
+                left: 25px;
+                width: 3px;
+            }
+            
+            .status-title {
+                font-size: 1rem;
+            }
+            
+            .status-time {
+                font-size: 0.8rem;
+            }
+            
+            .preparation-time {
+                padding: var(--spacing-md);
+                margin: var(--spacing-md) 0;
+            }
+            
+            .time-remaining {
+                font-size: 2.2rem;
+            }
+            
+            #preparationStatus {
+                font-size: 0.9rem;
+            }
+            
+            .order-items-section {
+                margin-top: var(--spacing-xl);
+                padding-top: var(--spacing-xl);
+            }
+            
+            .order-items-title {
+                font-size: 1.2rem;
+            }
+            
+            .order-items-list {
+                max-height: 250px;
+            }
+            
+            .order-item {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .order-item-image-container {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .order-item-name {
+                font-size: 0.95rem;
+            }
+            
+            .order-item-price {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Mobile (480px - 767px) */
+        @media (max-width: 767px) {
+            .status-content {
+                max-width: 95%;
+                width: 95%;
+                padding: var(--spacing-lg) var(--spacing-md);
+                margin: var(--spacing-sm);
+                max-height: 95vh;
+                border-radius: var(--radius-lg);
+            }
+            
+            .modal-header {
+                padding: var(--spacing-md) 0 var(--spacing-lg) 0;
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .modal-title {
+                font-size: 1.3rem;
+                text-align: center;
+                flex: 1;
+            }
+            
+            .close-modal {
+                position: absolute;
+                right: var(--spacing-md);
+                top: var(--spacing-md);
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+            
+            .order-info {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
+                border-radius: var(--radius-md);
+            }
+            
+            .order-info h4 {
+                font-size: 1.3rem;
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .order-info p {
+                font-size: 0.85rem;
+            }
+            
+            .preparation-time {
+                padding: var(--spacing-md);
+                margin: var(--spacing-md) 0;
+                border-radius: var(--radius-md);
+            }
+            
+            .preparation-time > div:first-child {
+                font-size: 0.8rem;
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .time-remaining {
+                font-size: 2rem;
+                margin: var(--spacing-xs) 0;
+            }
+            
+            #preparationStatus {
+                font-size: 0.9rem;
+            }
+            
+            .status-timeline {
+                margin: var(--spacing-lg) 0;
+                padding: var(--spacing-md) 0;
+            }
+            
+            .status-timeline::before {
+                left: 15px;
+                width: 2px;
+            }
+            
+            .status-step {
+                padding-left: 45px;
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .status-step::before {
+                left: 10px;
+                width: 16px;
+                height: 16px;
+                border-width: 2px;
+            }
+            
+            .status-step.completed::after {
+                left: 14px;
+                top: 10px;
+                font-size: 10px;
+            }
+            
+            .status-title {
+                font-size: 0.9rem;
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .status-time {
+                font-size: 0.75rem;
+            }
+            
+            .order-items-section {
+                margin-top: var(--spacing-lg);
+                padding-top: var(--spacing-lg);
+                border-top-width: 1px;
+            }
+            
+            .order-items-title {
+                font-size: 1.1rem;
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .order-items-title i {
+                font-size: 1rem;
+            }
+            
+            .order-items-list {
+                max-height: 200px;
+                padding-right: var(--spacing-xs);
+            }
+            
+            .order-items-list::-webkit-scrollbar {
+                width: 4px;
+            }
+            
+            .order-item {
+                padding: var(--spacing-sm);
+                margin-bottom: var(--spacing-xs);
+                border-radius: var(--radius-md);
+            }
+            
+            .order-item-image-container {
+                width: 60px;
+                height: 60px;
+                border-radius: var(--radius-sm);
+            }
+            
+            .order-item-name {
+                font-size: 0.9rem;
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .order-item-details {
+                font-size: 0.8rem;
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .order-item-price {
+                font-size: 0.95rem;
+            }
+            
+            .order-item-quantity {
+                padding: var(--spacing-xs) var(--spacing-xs);
+                font-size: 0.75rem;
+                border-radius: var(--radius-sm);
+            }
+            
+            .order-item-preparation-time {
+                font-size: 0.7rem;
+                margin-top: var(--spacing-xs);
+            }
+        }
+        
+        /* Small Mobile (374px - 479px) */
+        @media (max-width: 479px) {
+            .status-content {
+                max-width: 98%;
+                width: 98%;
+                padding: var(--spacing-md) var(--spacing-sm);
+                margin: var(--spacing-xs);
+                max-height: 98vh;
+                border-radius: var(--radius-md);
+            }
+            
+            .modal-header {
+                padding: var(--spacing-sm) 0 var(--spacing-md) 0;
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .modal-title {
+                font-size: 1.2rem;
+            }
+            
+            .close-modal {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+                right: var(--spacing-sm);
+                top: var(--spacing-sm);
+            }
+            
+            .order-info {
+                padding: var(--spacing-sm);
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .order-info h4 {
+                font-size: 1.2rem;
+            }
+            
+            .order-info p {
+                font-size: 0.8rem;
+            }
+            
+            .preparation-time {
+                padding: var(--spacing-sm);
+                margin: var(--spacing-sm) 0;
+            }
+            
+            .preparation-time > div:first-child {
+                font-size: 0.75rem;
+            }
+            
+            .time-remaining {
+                font-size: 1.8rem;
+            }
+            
+            #preparationStatus {
+                font-size: 0.85rem;
+            }
+            
+            .status-timeline {
+                margin: var(--spacing-md) 0;
+                padding: var(--spacing-sm) 0;
+            }
+            
+            .status-timeline::before {
+                left: 12px;
+                width: 2px;
+            }
+            
+            .status-step {
+                padding-left: 40px;
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .status-step::before {
+                left: 8px;
+                width: 14px;
+                height: 14px;
+                border-width: 2px;
+            }
+            
+            .status-step.completed::after {
+                left: 11px;
+                top: 8px;
+                font-size: 9px;
+            }
+            
+            .status-title {
+                font-size: 0.85rem;
+            }
+            
+            .status-time {
+                font-size: 0.7rem;
+            }
+            
+            .order-items-section {
+                margin-top: var(--spacing-md);
+                padding-top: var(--spacing-md);
+            }
+            
+            .order-items-title {
+                font-size: 1rem;
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .order-items-list {
+                max-height: 180px;
+            }
+            
+            .order-item {
+                padding: var(--spacing-xs);
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .order-item-image-container {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .order-item-name {
+                font-size: 0.85rem;
+            }
+            
+            .order-item-details {
+                font-size: 0.75rem;
+            }
+            
+            .order-item-price {
+                font-size: 0.9rem;
+            }
+            
+            .order-item-quantity {
+                font-size: 0.7rem;
+                padding: 2px var(--spacing-xs);
+            }
+        }
+        
+        /* Extra Small Mobile (373px and below) */
+        @media (max-width: 373px) {
+            .status-content {
+                max-width: 100%;
+                width: 100%;
+                padding: var(--spacing-sm);
+                margin: 0;
+                max-height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+            
+            .modal-header {
+                padding: var(--spacing-sm) 0;
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .modal-title {
+                font-size: 1.1rem;
+            }
+            
+            .close-modal {
+                width: 24px;
+                height: 24px;
+                font-size: 0.8rem;
+            }
+            
+            .order-info {
+                padding: var(--spacing-sm);
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .order-info h4 {
+                font-size: 1.1rem;
+            }
+            
+            .order-info p {
+                font-size: 0.75rem;
+            }
+            
+            .preparation-time {
+                padding: var(--spacing-xs);
+                margin: var(--spacing-xs) 0;
+            }
+            
+            .preparation-time > div:first-child {
+                font-size: 0.7rem;
+            }
+            
+            .time-remaining {
+                font-size: 1.6rem;
+            }
+            
+            #preparationStatus {
+                font-size: 0.8rem;
+            }
+            
+            .status-timeline {
+                margin: var(--spacing-sm) 0;
+                padding: var(--spacing-xs) 0;
+            }
+            
+            .status-timeline::before {
+                left: 10px;
+                width: 2px;
+            }
+            
+            .status-step {
+                padding-left: 35px;
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .status-step::before {
+                left: 6px;
+                width: 12px;
+                height: 12px;
+                border-width: 2px;
+            }
+            
+            .status-step.completed::after {
+                left: 9px;
+                top: 7px;
+                font-size: 8px;
+            }
+            
+            .status-title {
+                font-size: 0.8rem;
+            }
+            
+            .status-time {
+                font-size: 0.65rem;
+            }
+            
+            .order-items-section {
+                margin-top: var(--spacing-sm);
+                padding-top: var(--spacing-sm);
+            }
+            
+            .order-items-title {
+                font-size: 0.95rem;
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .order-items-list {
+                max-height: 150px;
+            }
+            
+            .order-item {
+                padding: var(--spacing-xs);
+                margin-bottom: var(--spacing-xs);
+                gap: var(--spacing-sm);
+            }
+            
+            .order-item-image-container {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .order-item-name {
+                font-size: 0.8rem;
+            }
+            
+            .order-item-details {
+                font-size: 0.7rem;
+            }
+            
+            .order-item-price {
+                font-size: 0.85rem;
+            }
+            
+            .order-item-quantity {
+                font-size: 0.65rem;
+                padding: 1px var(--spacing-xs);
+            }
+        }
+        
+        /* Landscape Orientation */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .status-content {
+                max-height: 85vh;
+                padding: var(--spacing-md) var(--spacing-lg);
+            }
+            
+            .order-info {
+                padding: var(--spacing-sm);
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .status-timeline {
+                margin: var(--spacing-md) 0;
+                padding: var(--spacing-sm) 0;
+            }
+            
+            .status-step {
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .preparation-time {
+                padding: var(--spacing-sm);
+                margin: var(--spacing-sm) 0;
+            }
+            
+            .time-remaining {
+                font-size: 1.8rem;
+            }
+            
+            .order-items-section {
+                margin-top: var(--spacing-md);
+                padding-top: var(--spacing-md);
+            }
+            
+            .order-items-list {
+                max-height: 120px;
+            }
+        }
+        
+        /* High Resolution Displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .status-content {
+                border: 0.5px solid var(--light-border);
+            }
+            
+            .order-info {
+                border: 0.5px solid var(--light-border);
+            }
+            
+            .status-timeline::before {
+                width: 2px;
+            }
+            
+            .status-step::before {
+                border-width: 2px;
+            }
+            
+            .order-item {
+                border: 0.5px solid var(--light-border);
+            }
+        }
+        
+        /* Touch Device Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .status-step {
+                padding-left: 50px;
+                margin-bottom: var(--spacing-lg);
+            }
+            
+            .status-step::before {
+                width: 22px;
+                height: 22px;
+            }
+            
+            .order-item {
+                padding: var(--spacing-md);
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .close-modal {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .order-item-image-container {
+                width: 70px;
+                height: 70px;
+            }
+        }
+        
+        /* Accessibility Enhancements */
+        @media (prefers-reduced-motion: reduce) {
+            .status-step::before,
+            .preparation-time::before,
+            .order-status::before,
+            .order-item {
+                animation: none;
+                transition: none;
+            }
+            
+            .status-step.active::before {
+                animation: none;
+            }
+        }
+        
+        @media (prefers-contrast: high) {
+            .status-content {
+                border: 2px solid var(--secondary-color);
+            }
+            
+            .order-info {
+                border: 2px solid var(--secondary-color);
+            }
+            
+            .status-timeline::before {
+                width: 4px;
+                background: var(--secondary-color);
+            }
+            
+            .status-step::before {
+                border-width: 3px;
+                border-color: var(--secondary-color);
+            }
+            
+            .preparation-time {
+                border: 2px solid var(--success-color);
+            }
+            
+            .order-item {
+                border: 2px solid var(--light-border);
+            }
+        }
+        
+        /* Order Items Display - Enhanced */
         .order-items-section {
-            margin-top: var(--spacing-lg);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid var(--light-border);
+            margin-top: var(--spacing-2xl);
+            padding-top: var(--spacing-2xl);
+            border-top: 2px solid var(--light-border);
         }
         
         .order-items-title {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.25rem;
+            font-weight: 700;
             color: var(--secondary-color);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
+            letter-spacing: 0.025em;
+        }
+        
+        .order-items-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
         }
         
         .order-items-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: var(--spacing-sm);
+        }
+        
+        .order-items-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .order-items-list::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 3px;
+        }
+        
+        .order-items-list::-webkit-scrollbar-thumb {
+            background: var(--light-border);
+            border-radius: 3px;
+        }
+        
+        .order-items-list::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
         }
         
         .order-item {
             display: flex;
+            align-items: center;
             gap: var(--spacing-md);
             padding: var(--spacing-md);
-            background: var(--light-bg);
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--light-bg), #f8fafc);
             border-radius: var(--radius-lg);
             border: 1px solid var(--light-border);
             transition: all var(--transition-normal);
         }
         
         .order-item:hover {
-            background: var(--light-hover);
-            border-color: var(--primary-color);
             transform: translateY(-2px);
-        }
-        
-        .order-item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-            background: linear-gradient(135deg, var(--light-hover), var(--light-border));
-        }
-        
-        .order-item-details {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-        
-        .order-item-name {
-            font-weight: 600;
-            color: var(--secondary-color);
-            font-size: 1rem;
-        }
-        
-        .order-item-description {
-            font-size: 0.85rem;
-            color: var(--light-text);
-            line-height: 1.4;
-        }
-        
-        .order-item-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .order-item-quantity {
-            background: var(--primary-color);
-            color: white;
-            padding: var(--spacing-xs) var(--spacing-md);
-            border-radius: var(--radius-xl);
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .order-item-price {
-            font-weight: 600;
-            color: var(--primary-color);
-            font-size: 1rem;
-        }
-        
-        .order-item-preparation-time {
-            font-size: 0.75rem;
-            color: var(--light-text);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
         }
         
         .order-item-image-container {
@@ -1206,10 +1989,12 @@
             overflow: hidden;
             transition: all var(--transition-normal);
             flex-shrink: 0;
+            border: 2px solid var(--light-border);
         }
         
         .order-item-image-container:hover {
             transform: scale(1.05);
+            border-color: var(--primary-color);
         }
         
         .order-item-image-container.loading {
@@ -1222,31 +2007,73 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        .order-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .order-item-name {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: var(--spacing-xs);
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+        
+        .order-item-details {
+            color: var(--light-text);
+            font-size: 0.85rem;
+            margin-bottom: var(--spacing-xs);
+            line-height: 1.4;
+        }
+        
+        .order-item-price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .order-item-quantity {
+            background: var(--primary-color);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-sm);
             border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: var(--spacing-sm);
         }
         
-        @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+        .order-item-preparation-time {
+            font-size: 0.75rem;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-xs);
         }
         
-        /* Animations */
-        @keyframes fadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
+        .order-item-preparation-time i {
+            color: var(--warning-color);
         }
         
-        .menu-card {
+        /* Branch Modal */
+        .branch-modal {
+            z-index: 2500;
+        }
+        
+        .branch-content {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .branch-list {
             animation: fadeIn 0.5s ease forwards;
         }
         
@@ -2954,9 +3781,21 @@
             }
         }
         
-        /* Order Status Modal */
+        /* Order Status Modal - Enhanced Responsive Design */
         .order-status-modal {
             z-index: 3000;
+        }
+        
+        .status-content {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid var(--light-border);
         }
         
         /* Loading Overlay */
@@ -3000,19 +3839,33 @@
             100% { transform: rotate(360deg); }
         }
         
-        .status-content {
-            background: white;
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-2xl);
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
+        .order-info {
+            background: linear-gradient(135deg, var(--light-bg), #f1f5f9);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid var(--light-border);
+            text-align: center;
+        }
+        
+        .order-info h4 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+            letter-spacing: 0.025em;
+        }
+        
+        .order-info p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+            margin: 0;
         }
         
         .status-timeline {
             position: relative;
             margin: var(--spacing-2xl) 0;
+            padding: var(--spacing-lg) 0;
         }
         
         .status-timeline::before {
@@ -3021,68 +3874,159 @@
             left: 20px;
             top: 0;
             bottom: 0;
-            width: 2px;
-            background: var(--light-border);
+            width: 3px;
+            background: linear-gradient(180deg, var(--light-border), var(--primary-color), var(--light-border));
+            border-radius: 2px;
         }
         
         .status-step {
             position: relative;
             padding-left: 60px;
             margin-bottom: var(--spacing-lg);
+            transition: all var(--transition-normal);
         }
         
         .status-step::before {
             content: '';
             position: absolute;
             left: 12px;
-            top: 5px;
-            width: 16px;
-            height: 16px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: var(--light-border);
-            border: 2px solid var(--light-border);
+            background: var(--light-bg);
+            border: 3px solid var(--light-border);
+            transition: all var(--transition-normal);
+            z-index: 2;
+        }
+        
+        .status-step:hover {
+            transform: translateX(5px);
         }
         
         .status-step.completed::before {
-            background: var(--success-color);
+            background: linear-gradient(135deg, var(--success-color), var(--success-light));
             border-color: var(--success-color);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
+        
+        .status-step.completed::after {
+            content: '✓';
+            position: absolute;
+            left: 18px;
+            top: 12px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 3;
         }
         
         .status-step.active::before {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             border-color: var(--primary-color);
-            animation: pulse 2s infinite;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
+            animation: activePulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        @keyframes activePulse {
+            0% { 
+                box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.1);
+                transform: scale(1.1);
+            }
+            100% { 
+                box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
+                transform: scale(1);
+            }
         }
         
         .status-title {
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: var(--spacing-xs);
+            font-size: 1rem;
+            color: var(--secondary-color);
+            letter-spacing: 0.025em;
+        }
+        
+        .status-step.completed .status-title {
+            color: var(--success-color);
+        }
+        
+        .status-step.active .status-title {
+            color: var(--primary-color);
+            font-weight: 800;
         }
         
         .status-time {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--light-text);
+            font-weight: 500;
+        }
+        
+        .status-step.completed .status-time {
+            color: var(--success-dark);
+        }
+        
+        .status-step.active .status-time {
+            color: var(--primary-dark);
+            font-weight: 600;
         }
         
         .preparation-time {
-            background: #f0fdf4;
-            border: 1px solid var(--success-color);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-md);
-            margin: var(--spacing-md) 0;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border: 2px solid var(--success-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
             text-align: center;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preparation-time::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success-color), var(--success-light));
+            animation: progress 2s ease-in-out infinite;
+        }
+        
+        @keyframes progress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .preparation-time > div:first-child {
+            font-weight: 600;
+            color: var(--success-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-xs);
         }
         
         .time-remaining {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: 800;
             color: var(--success-color);
+            margin: var(--spacing-xs) 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        #preparationStatus {
+            font-weight: 600;
+            color: var(--success-dark);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
         }
         
         /* Branch Modal */
@@ -4597,6 +5541,62 @@
             },
             
             /**
+             * Format date with detailed information in Bengali locale
+             * @param {Date|string} date - Date to format
+             * @returns {string} Formatted detailed date string
+             */
+            formatDetailedDate: (date) => {
+                const dateObj = date instanceof Date ? date : new Date(date);
+                if (isNaN(dateObj.getTime())) {
+                    dateObj = new Date();
+                }
+                
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                return dateObj.toLocaleDateString('bn-BD', options);
+            },
+            
+            /**
+             * Format time with detailed information in Bengali locale
+             * @param {Date|string} time - Time to format
+             * @returns {string} Formatted detailed time string
+             */
+            formatDetailedTime: (time) => {
+                const timeObj = time instanceof Date ? time : new Date(time);
+                if (isNaN(timeObj.getTime())) {
+                    timeObj = new Date();
+                }
+                
+                const options = {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                };
+                return timeObj.toLocaleTimeString('bn-BD', options);
+            },
+            
+            /**
+             * Format date and time together with detailed information
+             * @param {Date|string} dateTime - Date and time to format
+             * @returns {string} Formatted detailed date and time string
+             */
+            formatDetailedDateTime: (dateTime) => {
+                const dateObj = dateTime instanceof Date ? dateTime : new Date(dateTime);
+                if (isNaN(dateObj.getTime())) {
+                    dateObj = new Date();
+                }
+                
+                const dateStr = Utils.formatDetailedDate(dateObj);
+                const timeStr = Utils.formatDetailedTime(dateObj);
+                return `${dateStr}, ${timeStr}`;
+            },
+            
+            /**
              * Format time in Bengali locale
              * @param {Date|string} time - Time to format
              * @returns {string} Formatted time string
@@ -4742,6 +5742,9 @@
                     LanguageService.updateOrderModal();
                     LanguageService.updateOrderStatusModal();
                     
+                    // Update cart section
+                    LanguageService.updateCartSection();
+                    
                     // If menu service is available, force a reload to ensure proper language
                     if (typeof MenuService !== 'undefined' && MenuService.loadMenuItems) {
                         MenuService.loadMenuItems().then(() => {
@@ -4750,6 +5753,7 @@
                             LanguageService.updateCategoryNavigation();
                             LanguageService.updateOrderModal();
                             LanguageService.updateOrderStatusModal();
+                            LanguageService.updateCartSection();
                         });
                     }
                 }, 100); // Slightly longer delay to ensure DOM is ready
@@ -4851,6 +5855,9 @@
                 // Update order modal and order status modal
                 LanguageService.updateOrderModal();
                 LanguageService.updateOrderStatusModal();
+                
+                // Update cart section
+                LanguageService.updateCartSection();
             },
             
             /**
@@ -5419,6 +6426,51 @@
             },
             
             /**
+             * Update cart section with new language
+             */
+            updateCartSection: () => {
+                const isBengali = AppState.currentLanguage === 'bn';
+                
+                // Update cart title
+                const cartTitle = document.querySelector('#cartSidebar .cart-title');
+                if (cartTitle) {
+                    cartTitle.textContent = isBengali ? 'আপনার অর্ডার' : 'Your Order';
+                }
+                
+                // Update cart summary labels
+                const subtotalLabel = document.querySelector('#cartSidebar .summary-row:first-child span:first-child');
+                if (subtotalLabel) {
+                    subtotalLabel.textContent = isBengali ? 'সাবটোটাল:' : 'Subtotal:';
+                }
+                
+                const vatLabel = document.querySelector('#cartSidebar .summary-row:nth-child(2) span:first-child');
+                if (vatLabel) {
+                    vatLabel.textContent = isBengali ? 'ভ্যাট (5%):' : 'VAT (5%):';
+                }
+                
+                const serviceChargeLabel = document.querySelector('#cartSidebar .summary-row:nth-child(3) span:first-child');
+                if (serviceChargeLabel) {
+                    serviceChargeLabel.textContent = isBengali ? 'সার্ভিস চার্জ (10%):' : 'Service Charge (10%):';
+                }
+                
+                const totalLabel = document.querySelector('#cartSidebar .summary-row.summary-total span:first-child');
+                if (totalLabel) {
+                    totalLabel.textContent = isBengali ? 'সর্বমোট:' : 'Total:';
+                }
+                
+                // Update checkout button
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                if (checkoutBtn) {
+                    checkoutBtn.textContent = isBengali ? 'অর্ডার করুন' : 'Place Order';
+                }
+                
+                // Update cart display to refresh dynamic content
+                if (typeof UIService !== 'undefined' && UIService.updateCartDisplay) {
+                    UIService.updateCartDisplay();
+                }
+            },
+            
+            /**
              * Get text based on current language
              * @param {string} bnText - Bengali text
              * @param {string} enText - English text
@@ -5674,6 +6726,8 @@
                     const serviceCharge = document.getElementById('serviceCharge');
                     const total = document.getElementById('total');
                     
+                    const isBengali = AppState.currentLanguage === 'bn';
+                    
                     cartItems.innerHTML = '';
                     let itemCount = 0;
                     let subtotalAmount = 0;
@@ -5683,8 +6737,8 @@
                         cartItems.innerHTML = `
                             <div class="empty-cart">
                                 <i class="fas fa-shopping-cart"></i>
-                                <h3>আপনার কার্ট খালি</h3>
-                                <p>কিছু সুস্বাদু খাবার যোগ করে শুরু করুন!</p>
+                                <h3>${isBengali ? 'আপনার কার্ট খালি' : 'Your Cart is Empty'}</h3>
+                                <p>${isBengali ? 'কিছু সুস্বাদু খাবার যোগ করে শুরু করুন!' : 'Add some delicious food to get started!'}</p>
                             </div>
                         `;
                     } else {
@@ -5696,17 +6750,17 @@
                             cartItem.className = 'cart-item';
                             cartItem.innerHTML = `
                                 <div class="cart-item-info">
-                                    <div class="cart-item-name">${item.name}</div>
+                                    <div class="cart-item-name">${isBengali ? (item.name_bn || item.name) : (item.name || item.name_bn)}</div>
                                     ${item.customization.length > 0 ? `<div class="cart-item-details">${item.customization.join(', ')}</div>` : ''}
-                                    ${item.specialNotes ? `<div class="cart-item-details">নোট: ${item.specialNotes}</div>` : ''}
+                                    ${item.specialNotes ? `<div class="cart-item-details">${isBengali ? 'নোট: ' : 'Note: '}${item.specialNotes}</div>` : ''}
                                     <div class="cart-item-price">${Utils.formatCurrency(item.price)} x ${item.quantity}</div>
                                 </div>
                                 <div class="quantity-controls">
-                                    <button class="quantity-btn" onclick="CartService.updateQuantity('${item.id}', -1)" title="কমান">
+                                    <button class="quantity-btn" onclick="CartService.updateQuantity('${item.id}', -1)" title="${isBengali ? 'কমান' : 'Decrease'}">
                                         <i class="fas fa-minus"></i>
                                     </button>
                                     <span class="quantity">${item.quantity}</span>
-                                    <button class="quantity-btn" onclick="CartService.updateQuantity('${item.id}', 1)" title="বাড়ান">
+                                    <button class="quantity-btn" onclick="CartService.updateQuantity('${item.id}', 1)" title="${isBengali ? 'বাড়ান' : 'Increase'}">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
@@ -6049,9 +7103,25 @@
                 }
                 
                 orderItemsList.innerHTML = items.map(item => {
-                    const preparationTime = item.preparation_time || 15;
+                    // Try to get preparation time from different possible fields with better fallback
+                    let preparationTime = item.preparation_time || 
+                                          item.preparationTime || 
+                                          (item.menu_item && item.menu_item.preparation_time);
+                    
+                    // If not found directly, try to get from cache using menu_item_id
+                    if (!preparationTime && (item.menu_item_id || item.menuItemId)) {
+                        const menuItemId = item.menu_item_id || item.menuItemId;
+                        const cachedMenuItem = OrderService.getMenuItemFromCache(menuItemId);
+                        if (cachedMenuItem && cachedMenuItem.preparation_time) {
+                            preparationTime = cachedMenuItem.preparation_time;
+                        }
+                    }
+                    
+                    // Final fallback
+                    preparationTime = preparationTime || 15;
+                                          
                     const totalPrice = (item.unit_price * item.quantity).toFixed(2);
-                    const itemName = item.name_bn || item.name_en || 'আইটেম';
+                    const itemName = item.name_bn || item.name_en || item.name || 'আইটেম';
                     let itemDescription = '';
                     
                     // Handle descriptions with fallback
@@ -6059,12 +7129,15 @@
                         itemDescription = item.description_bn;
                     } else if (item.description_en && item.description_en.trim() !== '') {
                         itemDescription = item.description_en;
+                    } else if (item.description && item.description.trim() !== '') {
+                        itemDescription = item.description;
                     }
                     
                     // Handle image with same placeholder style as menu item cards
                     let imageContent;
-                    if (item.image && item.image.trim() !== '') {
-                        const imageUrl = item.image.trim();
+                    const itemImage = item.image || (item.menu_item && item.menu_item.image);
+                    if (itemImage && itemImage.trim() !== '') {
+                        const imageUrl = itemImage.trim();
                         const imageAltText = itemName;
                         
                         imageContent = `
@@ -6621,6 +7694,20 @@
                 try {
                     const savedCart = localStorage.getItem(`cart_${AppState.branchId}`);
                     AppState.cart = savedCart ? Utils.safeJsonParse(savedCart, []) : [];
+                    
+                    // Migrate old cart items to new format
+                    AppState.cart = AppState.cart.map(item => {
+                        // If item has old format (only 'name' field), migrate to new format
+                        if (item.name && !item.name_bn && !item.name_en) {
+                            return {
+                                ...item,
+                                name_bn: item.name, // Assume old name was Bengali
+                                name: item.name   // Keep the same for English for now
+                            };
+                        }
+                        return item;
+                    });
+                    
                     UIService.updateCartDisplay();
                 } catch (error) {
                     console.error('Error loading cart from local storage:', error);
@@ -6660,8 +7747,10 @@
                 const cartItem = {
                     id: Utils.generateId(),
                     menuItemId: item.id,
-                    name: item.name_bn || item.name,
+                    name_bn: item.name_bn,
+                    name: item.name,
                     price: item.price,
+                    preparation_time: item.preparation_time, // Add preparation time
                     quantity: 1,
                     customization: [],
                     specialNotes: '',
@@ -6689,8 +7778,10 @@
                         const cartItem = {
                             id: Utils.generateId(),
                             menuItemId: item.id,
-                            name: item.name_bn || item.name,
+                            name_bn: item.name_bn,
+                            name: item.name,
                             price: item.price,
+                            preparation_time: item.preparation_time, // Add preparation time
                             quantity: quantity,
                             customization: [],
                             specialNotes: '',
@@ -6769,8 +7860,10 @@
                 const cartItem = {
                     id: Utils.generateId(),
                     menuItemId: item.id,
-                    name: item.name_bn || item.name,
+                    name_bn: item.name_bn,
+                    name: item.name,
                     price: Math.round(totalPrice),
+                    preparation_time: item.preparation_time, // Add preparation time
                     quantity: 1,
                     customization: customizationDetails,
                     specialNotes: specialNotes,
@@ -7027,6 +8120,7 @@
                         menu_item_id: item.menuItemId,
                         quantity: item.quantity,
                         unit_price: item.price,
+                        preparation_time: item.preparation_time, // Add preparation time
                         notes: item.customization.length > 0 ? item.customization.join(', ') + (item.specialNotes ? '; ' + item.specialNotes : '') : item.specialNotes
                     }))
                 };
@@ -7121,6 +8215,26 @@
              * @param {Object} orderData - Order data
              */
             showOrderStatus(orderData) {
+                // Debug: Log the order data received
+                console.log('showOrderStatus called with orderData:', orderData);
+                console.log('Order items:', orderData.items);
+                
+                // Reset cached preparation time for new order
+                AppState.currentOrderPreparationTime = null;
+                console.log('Reset cached preparation time for new order');
+                
+                // Debug: Check preparation time in order items
+                if (orderData.items && orderData.items.length > 0) {
+                    orderData.items.forEach((item, index) => {
+                        console.log(`Item ${index} preparation time:`, {
+                            item: item,
+                            preparation_time: item.preparation_time,
+                            preparationTime: item.preparationTime,
+                            menu_item_preparation_time: item.menu_item && item.menu_item.preparation_time
+                        });
+                    });
+                }
+                
                 const modal = document.getElementById('orderStatusModal');
                 document.getElementById('orderNumber').textContent = orderData.order_number;
                 
@@ -7141,8 +8255,9 @@
                     orderDate = new Date(); // Use current time as final fallback
                 }
                 
-                document.getElementById('orderTime').textContent = Utils.formatDate(orderDate);
-                document.getElementById('orderReceivedTime').textContent = Utils.formatTime(orderDate);
+                // Show detailed date and time information
+                document.getElementById('orderTime').textContent = Utils.formatDetailedDateTime(orderDate);
+                document.getElementById('orderReceivedTime').textContent = Utils.formatDetailedTime(orderDate);
                 
                 // Ensure orderData has the correct created_at field for future calculations
                 if (!orderData.created_at) {
@@ -7157,7 +8272,7 @@
                 
                 // Calculate preparation time based on order items and creation time
                 const preparationTime = this.calculateOrderPreparationTime(orderData.items || [], orderData.created_at, orderData.status);
-                this.updatePreparationTime(preparationTime.remainingSeconds);
+                this.updatePreparationTime(preparationTime.remainingSeconds, preparationTime.totalMinutes);
                 
                 UIService.showModal('orderStatusModal');
                 
@@ -7179,67 +8294,211 @@
              * @returns {Object} Preparation time calculation
              */
             calculateOrderPreparationTime(items, createdAt, currentStatus) {
-                // Fixed 20 minutes preparation time for all orders
-                const totalPreparationTime = AppState.config.preparationTime;
+                // Debug: Log the items received
+                console.log('calculateOrderPreparationTime called with items:', items);
+                console.log('Order created at:', createdAt);
+                console.log('Current status:', currentStatus);
                 
+                // If we have a cached preparation time for this order, use it
+                if (AppState.currentOrderPreparationTime) {
+                    console.log('Using cached preparation time:', AppState.currentOrderPreparationTime);
+                    return this.calculateRemainingTime(AppState.currentOrderPreparationTime, createdAt, currentStatus);
+                }
+                
+                // Calculate preparation time based on the maximum preparation time of ordered items
+                let totalPreparationTime = AppState.config.preparationTime; // Default fallback
+                
+                if (items && items.length > 0) {
+                    // Find the maximum preparation time among all items
+                    const itemPreparationTimes = items.map((item, index) => {
+                        console.log(`Processing item ${index}:`, item);
+                        
+                        // Try to get preparation time from different possible fields
+                        let prepTime = null;
+                        
+                        // Direct field
+                        if (item.preparation_time !== undefined && item.preparation_time !== null) {
+                            prepTime = item.preparation_time;
+                            console.log(`Found preparation_time directly: ${prepTime}`);
+                        }
+                        // CamelCase version
+                        else if (item.preparationTime !== undefined && item.preparationTime !== null) {
+                            prepTime = item.preparationTime;
+                            console.log(`Found preparationTime directly: ${prepTime}`);
+                        }
+                        // Nested in menu_item object
+                        else if (item.menu_item && item.menu_item.preparation_time !== undefined && item.menu_item.preparation_time !== null) {
+                            prepTime = item.menu_item.preparation_time;
+                            console.log(`Found preparation_time in menu_item: ${prepTime}`);
+                        }
+                        // Nested in menu_item object (camelCase)
+                        else if (item.menu_item && item.menu_item.preparationTime !== undefined && item.menu_item.preparationTime !== null) {
+                            prepTime = item.menu_item.preparationTime;
+                            console.log(`Found preparationTime in menu_item: ${prepTime}`);
+                        }
+                        // Check if we have menu_item_id and can fetch the menu item
+                        else if (item.menu_item_id || item.menuItemId) {
+                            const menuItemId = item.menu_item_id || item.menuItemId;
+                            console.log(`No preparation_time found, but have menu_item_id: ${menuItemId}`);
+                            // Try to get from cached menu items
+                            const cachedMenuItem = this.getMenuItemFromCache(menuItemId);
+                            if (cachedMenuItem && cachedMenuItem.preparation_time) {
+                                prepTime = cachedMenuItem.preparation_time;
+                                console.log(`Found preparation_time from cached menu item: ${prepTime}`);
+                            }
+                        }
+                        // Use default fallback
+                        else {
+                            prepTime = AppState.config.preparationTime;
+                            console.log(`No preparation_time found, using default: ${prepTime}`);
+                        }
+                        
+                        // Ensure prepTime is a number
+                        prepTime = Number(prepTime) || AppState.config.preparationTime;
+                        
+                        console.log(`Final prepTime for item ${index}: ${prepTime}`);
+                        return prepTime;
+                    });
+                    
+                    // Use the maximum preparation time among all items (this is correct - the longest item determines total time)
+                    const maxPrepTime = Math.max(...itemPreparationTimes);
+                    totalPreparationTime = maxPrepTime;
+                    console.log('All item preparation times:', itemPreparationTimes);
+                    console.log('Maximum preparation time selected:', totalPreparationTime);
+                    
+                    // Cache this preparation time for future updates
+                    AppState.currentOrderPreparationTime = totalPreparationTime;
+                    console.log('Cached preparation time for current order:', AppState.currentOrderPreparationTime);
+                } else {
+                    console.log('No items found, using default preparation time:', totalPreparationTime);
+                    // Cache the default time as well
+                    AppState.currentOrderPreparationTime = totalPreparationTime;
+                }
+                
+                return this.calculateRemainingTime(totalPreparationTime, createdAt, currentStatus);
+            },
+
+            /**
+             * Calculate remaining time based on total preparation time
+             * @param {number} totalPreparationTime - Total preparation time in minutes
+             * @param {string} createdAt - Order creation time
+             * @param {string} currentStatus - Current order status
+             * @returns {Object} Time calculation
+             */
+            calculateRemainingTime(totalPreparationTime, createdAt, currentStatus) {
                 // Calculate elapsed time since order creation with fallback
                 let orderCreatedAt;
                 if (createdAt) {
                     orderCreatedAt = new Date(createdAt);
                     if (isNaN(orderCreatedAt.getTime())) {
                         orderCreatedAt = new Date(); // Fallback to current time
+                        console.log('Invalid created_at date, using current time');
                     }
                 } else {
                     orderCreatedAt = new Date(); // Fallback to current time
+                    console.log('No created_at date provided, using current time');
                 }
                 
                 const currentTime = new Date();
                 const elapsedMinutes = (currentTime - orderCreatedAt) / (1000 * 60);
                 
+                console.log('Time calculation:', {
+                    orderCreatedAt: orderCreatedAt.toISOString(),
+                    currentTime: currentTime.toISOString(),
+                    elapsedMinutes: elapsedMinutes,
+                    totalPreparationTime: totalPreparationTime
+                });
+                
                 // Calculate remaining time based on current status and elapsed time
+                // SIMPLIFIED LOGIC: Use a linear progress based on status
                 let statusProgress = 0;
-                let statusTimeMultiplier = 1;
+                let remainingTimeMultiplier = 1;
                 
                 switch (currentStatus) {
                     case 'pending':
                         statusProgress = 0;
-                        statusTimeMultiplier = 1; // Full 20 minutes from order creation
+                        remainingTimeMultiplier = 1.0; // 100% of time remaining
                         break;
                     case 'confirmed':
-                        statusProgress = 0.2;
-                        statusTimeMultiplier = 0.8; // 80% of 20 minutes = 16 minutes remaining
+                        statusProgress = 0.25;
+                        remainingTimeMultiplier = 0.75; // 75% of time remaining
                         break;
                     case 'preparing':
-                        statusProgress = 0.5;
-                        statusTimeMultiplier = 0.5; // 50% of 20 minutes = 10 minutes remaining
+                        statusProgress = 0.6;
+                        remainingTimeMultiplier = 0.4; // 40% of time remaining
                         break;
                     case 'ready':
                         statusProgress = 0.9;
-                        statusTimeMultiplier = 0.1; // 10% of 20 minutes = 2 minutes remaining
+                        remainingTimeMultiplier = 0.1; // 10% of time remaining
                         break;
                     case 'served':
                     case 'completed':
                         statusProgress = 1;
-                        statusTimeMultiplier = 0; // No time remaining
+                        remainingTimeMultiplier = 0; // No time remaining
                         break;
                     default:
                         statusProgress = 0;
-                        statusTimeMultiplier = 1;
+                        remainingTimeMultiplier = 1;
                 }
                 
-                // Calculate remaining time: (total time * status multiplier) - elapsed time
-                const theoreticalRemainingMinutes = totalPreparationTime * statusTimeMultiplier;
-                const actualRemainingMinutes = Math.max(0, theoreticalRemainingMinutes - elapsedMinutes);
+                // Calculate remaining time more simply and consistently
+                const totalExpectedMinutes = totalPreparationTime;
+                const expectedRemainingMinutes = totalExpectedMinutes * remainingTimeMultiplier;
+                const actualRemainingMinutes = Math.max(0, expectedRemainingMinutes - elapsedMinutes);
                 const remainingSeconds = Math.max(0, actualRemainingMinutes * 60);
+                
+                console.log('Final preparation time calculation:', {
+                    totalMinutes: totalPreparationTime,
+                    statusProgress: statusProgress,
+                    remainingTimeMultiplier: remainingTimeMultiplier,
+                    expectedRemainingMinutes: expectedRemainingMinutes,
+                    elapsedMinutes: elapsedMinutes,
+                    actualRemainingMinutes: actualRemainingMinutes,
+                    remainingSeconds: Math.floor(remainingSeconds)
+                });
                 
                 return {
                     totalMinutes: totalPreparationTime,
                     remainingSeconds: Math.floor(remainingSeconds),
                     elapsedMinutes: Math.floor(elapsedMinutes),
                     statusProgress: statusProgress,
-                    theoreticalRemainingMinutes: theoreticalRemainingMinutes,
+                    expectedRemainingMinutes: expectedRemainingMinutes,
                     actualRemainingMinutes: actualRemainingMinutes
                 };
+            },
+
+            /**
+             * Get menu item from cache
+             * @param {number} menuItemId - Menu item ID
+             * @returns {Object|null} Menu item or null if not found
+             */
+            getMenuItemFromCache(menuItemId) {
+                // Try to get from AppState menu items
+                if (AppState.menuItems && AppState.menuItems.length > 0) {
+                    const menuItem = AppState.menuItems.find(item => item.id == menuItemId);
+                    if (menuItem) {
+                        console.log(`Found menu item in AppState cache:`, menuItem);
+                        return menuItem;
+                    }
+                }
+                
+                // Try to get from localStorage
+                const cachedMenu = localStorage.getItem(`menuItems_${AppState.branchId}`);
+                if (cachedMenu) {
+                    try {
+                        const menuItems = JSON.parse(cachedMenu);
+                        const menuItem = menuItems.find(item => item.id == menuItemId);
+                        if (menuItem) {
+                            console.log(`Found menu item in localStorage cache:`, menuItem);
+                            return menuItem;
+                        }
+                    } catch (error) {
+                        console.error('Error parsing cached menu items:', error);
+                    }
+                }
+                
+                console.log(`Menu item not found in cache for ID: ${menuItemId}`);
+                return null;
             },
             
             /**
@@ -7303,26 +8562,48 @@
              * Update preparation time display
              * @param {number} remainingSeconds - Remaining seconds
              */
-            updatePreparationTime(remainingSeconds) {
+            updatePreparationTime(remainingSeconds, totalMinutes = null) {
                 const minutes = Math.floor(remainingSeconds / 60);
                 const seconds = remainingSeconds % 60;
                 
                 const timeElement = document.getElementById('timeRemaining');
                 const statusElement = document.getElementById('preparationStatus');
                 
+                // Update the time display
                 timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 
-                if (remainingSeconds > 0) {
-                    if (minutes > 5) {
-                        statusElement.textContent = `প্রায় ${minutes} মিনিট বাকি`;
-                    } else if (minutes > 0) {
-                        statusElement.textContent = `প্রায় ${minutes} মিনিট বাকি`;
-                    } else {
-                        statusElement.textContent = 'প্রায় প্রস্তুত';
+                // Add total time info if available
+                if (totalMinutes && totalMinutes > 0) {
+                    const isBengali = AppState.currentLanguage === 'bn';
+                    const totalTimeText = isBengali 
+                        ? `মোট: ${totalMinutes} মিনিট`
+                        : `Total: ${totalMinutes} min`;
+                    
+                    // Update or create total time display
+                    let totalTimeElement = document.getElementById('totalPreparationTime');
+                    if (!totalTimeElement) {
+                        totalTimeElement = document.createElement('div');
+                        totalTimeElement.id = 'totalPreparationTime';
+                        totalTimeElement.style.fontSize = '0.8rem';
+                        totalTimeElement.style.color = 'var(--light-text)';
+                        totalTimeElement.style.marginTop = 'var(--spacing-xs)';
+                        timeElement.parentNode.insertBefore(totalTimeElement, timeElement.nextSibling);
                     }
-                    setTimeout(() => this.updatePreparationTime(remainingSeconds - 1), 1000);
+                    totalTimeElement.textContent = totalTimeText;
+                }
+                
+                if (remainingSeconds > 0) {
+                    const isBengali = AppState.currentLanguage === 'bn';
+                    if (minutes > 5) {
+                        statusElement.textContent = isBengali ? `প্রায় ${minutes} মিনিট বাকি` : `About ${minutes} minutes left`;
+                    } else if (minutes > 0) {
+                        statusElement.textContent = isBengali ? `প্রায় ${minutes} মিনিট বাকি` : `About ${minutes} minutes left`;
+                    } else {
+                        statusElement.textContent = isBengali ? 'প্রায় প্রস্তুত' : 'Almost ready';
+                    }
+                    setTimeout(() => this.updatePreparationTime(remainingSeconds - 1, totalMinutes), 1000);
                 } else {
-                    statusElement.textContent = 'প্রস্তুত!';
+                    statusElement.textContent = isBengali ? 'প্রস্তুত!' : 'Ready!';
                     timeElement.textContent = '00:00';
                 }
             },
@@ -7333,8 +8614,12 @@
              */
             async updateOrderStatus(orderId) {
                 try {
+                    console.log('updateOrderStatus called for orderId:', orderId);
                     const response = await ApiService.getOrder(orderId);
                     const order = response.data;
+                    
+                    console.log('Order data received:', order);
+                    console.log('Order items:', order.items);
                     
                     this.updateStatusTimeline(order.status, order);
                     
@@ -7344,7 +8629,8 @@
                     // Update preparation time if order is still active
                     if (order.status !== 'completed' && order.status !== 'cancelled') {
                         const preparationTime = this.calculateOrderPreparationTime(order.items || [], order.created_at, order.status);
-                        this.updatePreparationTime(preparationTime.remainingSeconds);
+                        console.log('Preparation time calculation result:', preparationTime);
+                        this.updatePreparationTime(preparationTime.remainingSeconds, preparationTime.totalMinutes);
                     }
                     
                     // Stop updates if order is completed or cancelled
@@ -7668,12 +8954,7 @@
                         // Load tables if dine-in is default
                         const orderTypeInput = document.getElementById('orderType');
                         if (orderTypeInput && orderTypeInput.value === 'dine_in') {
-                            console.log('Loading tables for dine-in...');
-                            if (typeof OrderService.loadTables === 'function') {
-                                OrderService.loadTables();
-                            } else {
-                                console.error('OrderService.loadTables is not a function');
-                            }
+                            EventListeners.loadTables();
                         }
                         
                         const customerNameInput = document.getElementById('customerName');
@@ -7717,25 +8998,6 @@
                 // Order form
                 document.getElementById('orderForm').addEventListener('submit', OrderService.submitOrder.bind(OrderService));
                 
-                  // Payment methods with enhanced feedback and debugging
-                const paymentMethods = document.querySelectorAll('.payment-method');
-                console.log('Found payment methods:', paymentMethods.length);
-                paymentMethods.forEach((method, index) => {
-                    console.log(`Setting up payment method ${index}:`, method.dataset.payment);
-                    method.addEventListener('click', (e) => {
-                        console.log('Payment method clicked:', e.currentTarget.dataset.payment);
-                        console.log('Event object:', e);
-                        console.log('Current target:', e.currentTarget);
-                        if (typeof EventListeners.selectPaymentMethod === 'function') {
-                            EventListeners.selectPaymentMethod(e.currentTarget, e);
-                        } else {
-                            console.error('EventListeners.selectPaymentMethod is not a function');
-                        }
-                    });
-                    // Test if the element is clickable
-                    method.style.cursor = 'pointer';
-                });
-                
                 // Modal close buttons
                 document.getElementById('closeOrderModal').addEventListener('click', () => {
                     UIService.hideModal('orderModal');
@@ -7746,48 +9008,14 @@
                     UIService.hideModal('orderModal');
                 });
                 
-                // Order type selection - enhanced debugging and error handling
+                // Order type selection
                 const orderTypeOptions = document.querySelectorAll('.order-type-option');
-                console.log('Found order type options:', orderTypeOptions.length);
-                orderTypeOptions.forEach((option, index) => {
-                    console.log(`Setting up order type option ${index}:`, option.dataset.type);
+                orderTypeOptions.forEach((option) => {
                     option.addEventListener('click', (e) => {
-                        console.log('Order type clicked:', e.currentTarget.dataset.type);
-                        console.log('Event object:', e);
-                        console.log('Current target:', e.currentTarget);
                         const orderType = e.currentTarget.dataset.type;
-                        if (typeof EventListeners.selectOrderType === 'function') {
-                            EventListeners.selectOrderType(orderType, e);
-                        } else {
-                            console.error('EventListeners.selectOrderType is not a function');
-                        }
+                        EventListeners.selectOrderType(orderType);
                     });
-                    // Test if the element is clickable
-                    option.style.cursor = 'pointer';
                 });
-                
-                // Table selection with enhanced feedback and debugging
-                const tableGrid = document.getElementById('tableGrid');
-                if (tableGrid) {
-                    console.log('Found table grid element');
-                    tableGrid.addEventListener('click', (e) => {
-                        console.log('Table grid clicked');
-                        const tableItem = e.target.closest('.table-item');
-                        console.log('Table item found:', tableItem);
-                        if (tableItem && !tableItem.classList.contains('occupied') && !tableItem.classList.contains('reserved')) {
-                            console.log('Table item is available, selecting...');
-                            if (typeof EventListeners.selectTable === 'function') {
-                                EventListeners.selectTable(tableItem, e);
-                            } else {
-                                console.error('EventListeners.selectTable is not a function');
-                            }
-                        } else {
-                            console.log('Table item is not available or not found');
-                        }
-                    });
-                } else {
-                    console.error('Table grid element not found');
-                }
                 
                 document.getElementById('closeCustomization').addEventListener('click', () => {
                     UIService.hideModal('customizationModal');
@@ -7861,45 +9089,18 @@
             },
             
             /**
-             * Select order type with enhanced animations
+             * Select order type
              * @param {string} orderType - Order type (dine_in, takeaway, delivery)
-             * @param {Event} event - The click event
              */
-            selectOrderType(orderType, event) {
-                console.log('selectOrderType called with:', orderType);
-                console.log('Event object received:', event);
-                console.log('this context:', this);
-                
-                // Add ripple effect
-                const selectedOption = document.querySelector(`[data-type="${orderType}"]`);
-                if (selectedOption && event) {
-                    console.log('Creating ripple effect for:', orderType);
-                    this.createRippleEffect(selectedOption, event);
-                }
-
-                // Update visual selection with animation
+            selectOrderType(orderType) {
+                // Update visual selection
                 document.querySelectorAll('.order-type-option').forEach(option => {
-                    if (option.dataset.type === orderType) {
-                        option.classList.add('selected');
-                        console.log('Added selected class to:', option.dataset.type);
-                        // Add a subtle bounce animation
-                        option.style.animation = 'bounce 0.4s var(--bounce)';
-                        setTimeout(() => {
-                            option.style.animation = '';
-                        }, 400);
-                    } else {
-                        option.classList.remove('selected');
-                    }
+                    option.classList.remove('selected');
                 });
-
+                document.querySelector(`[data-type="${orderType}"]`).classList.add('selected');
+                
                 // Update hidden input
-                const orderTypeInput = document.getElementById('orderType');
-                if (orderTypeInput) {
-                    orderTypeInput.value = orderType;
-                    console.log('Updated orderType input to:', orderType);
-                } else {
-                    console.error('orderType input not found');
-                }
+                document.getElementById('orderType').value = orderType;
                 
                 // Show/hide sections based on order type
                 const tableSection = document.getElementById('tableSection');
@@ -7908,7 +9109,7 @@
                 if (orderType === 'dine_in') {
                     tableSection.style.display = 'block';
                     deliverySection.style.display = 'none';
-                    OrderService.loadTables();
+                    EventListeners.loadTables();
                 } else if (orderType === 'delivery') {
                     tableSection.style.display = 'none';
                     deliverySection.style.display = 'block';
@@ -7935,7 +9136,7 @@
                     const tables = response.data;
                     
                     // Render tables
-                    this.renderTables(tables);
+                    EventListeners.renderTables(tables);
                     
                     // Hide loading, show grid
                     tableLoading.style.display = 'none';
@@ -8269,12 +9470,7 @@
             // Load tables if dine-in is default
             const orderTypeInput = document.getElementById('orderType');
             if (orderTypeInput && orderTypeInput.value === 'dine_in') {
-                console.log('Loading tables for dine-in...');
-                if (typeof OrderService.loadTables === 'function') {
-                    OrderService.loadTables();
-                } else {
-                    console.error('OrderService.loadTables is not available');
-                }
+                EventListeners.loadTables();
             }
             
             const customerNameInput = document.getElementById('customerName');
@@ -8306,6 +9502,42 @@
                 console.error('LanguageService.updateOrderModal is not available');
             }
             
+            // Setup payment method event listeners
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', (e) => {
+                    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                    e.currentTarget.classList.add('selected');
+                    AppState.selectedPaymentMethod = e.currentTarget.dataset.payment;
+                });
+            });
+            
+            // Setup table selection event listeners
+            const tableGrid = document.getElementById('tableGrid');
+            if (tableGrid) {
+                console.log('Found table grid element');
+                tableGrid.addEventListener('click', (e) => {
+                    console.log('Table grid clicked');
+                    const tableItem = e.target.closest('.table-item');
+                    console.log('Table item found:', tableItem);
+                    if (tableItem && !tableItem.classList.contains('occupied') && !tableItem.classList.contains('reserved')) {
+                        console.log('Table item is available, selecting...');
+                        // Simple inline table selection logic
+                        document.querySelectorAll('.table-item').forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                        tableItem.classList.add('selected');
+                        const selectedTableInput = document.getElementById('selectedTable');
+                        if (selectedTableInput) {
+                            selectedTableInput.value = tableItem.dataset.tableId;
+                        }
+                    } else {
+                        console.log('Table item is not available or not found');
+                    }
+                });
+            } else {
+                console.error('Table grid element not found');
+            }
+            
             console.log('Global checkout handler completed');
         }
         
@@ -8326,6 +9558,7 @@
                     LanguageService.updateCategoryNavigation();
                     LanguageService.updateOrderModal();
                     LanguageService.updateOrderStatusModal();
+                    LanguageService.updateCartSection();
                 }
             }, 500);
             
