@@ -436,12 +436,22 @@ function handleOrders() {
                 
                 $db->commit();
                 
+                // Fetch the newly created order to return it
+                $newOrderSql = "SELECT o.*, t.table_number 
+                                FROM orders o 
+                                LEFT JOIN tables t ON o.table_id = t.id 
+                                WHERE o.id = ?";
+                $newOrder = $db->fetch($newOrderSql, [$orderId]);
+                
+                $itemsSql = "SELECT oi.*, mi.name_bn, mi.name, mi.preparation_time
+                             FROM order_items oi
+                             LEFT JOIN menu_items mi ON oi.menu_item_id = mi.id
+                             WHERE oi.order_id = ?";
+                $newOrder['items'] = $db->fetchAll($itemsSql, [$orderId]);
+
                 echo json_encode([
                     'success' => true,
-                    'data' => [
-                        'id' => $orderId,
-                        'order_number' => $orderNumber
-                    ]
+                    'data' => $newOrder
                 ]);
                 
             } catch (Exception $e) {
