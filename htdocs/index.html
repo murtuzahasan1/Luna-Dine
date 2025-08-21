@@ -5457,6 +5457,11 @@
             menuItems: [],
             branches: [],
             itemQuantities: {},
+
+            // Timers and Intervals
+            statusUpdateInterval: null,
+            backgroundUpdateInterval: null,
+            preparationTimerId: null,
             
             // User Preferences
             selectedPaymentMethod: '',
@@ -8215,6 +8220,12 @@
              * @param {Object} orderData - Order data
              */
             showOrderStatus(orderData) {
+                // Clear the previous preparation timer
+                if (AppState.preparationTimerId) {
+                    clearTimeout(AppState.preparationTimerId);
+                    AppState.preparationTimerId = null;
+                }
+
                 // Debug: Log the order data received
                 console.log('showOrderStatus called with orderData:', orderData);
                 console.log('Order items:', orderData.items);
@@ -8287,6 +8298,73 @@
             },
             
             /**
+             * Continue order status display after potential enrichment
+             * @param {Object} orderData - Order data
+             */
+            continueOrderStatusDisplay(orderData) {
+                // Reset cached preparation time for new order
+                AppState.currentOrderPreparationTime = null;
+                console.log('Reset cached preparation time for new order');
+                
+                const modal = document.getElementById('orderStatusModal');
+                document.getElementById('orderNumber').textContent = orderData.order_number;
+                
+                // Handle created_at field with fallbacks
+                let orderDate;
+                if (orderData.created_at) {
+                    orderDate = new Date(orderData.created_at);
+                } else if (orderData.date) {
+                    // Fallback to date field from order history
+                    orderDate = new Date(orderData.date);
+                } else {
+                    // Fallback to current time
+                    orderDate = new Date();
+                }
+                
+                // Validate the date
+                if (isNaN(orderDate.getTime())) {
+                    orderDate = new Date(); // Use current time as final fallback
+                }
+                
+                // Show detailed date and time information
+                document.getElementById('orderTime').textContent = Utils.formatDetailedDateTime(orderDate);
+                document.getElementById('orderReceivedTime').textContent = Utils.formatDetailedTime(orderDate);
+                
+                // Ensure orderData has the correct created_at field for future calculations
+                if (!orderData.created_at) {
+                    orderData.created_at = orderDate.toISOString();
+                }
+                
+                // Display order items with images
+                UIService.displayOrderItems(orderData.items || []);
+                
+                // Update status timeline based on current order status
+                this.updateStatusTimeline(orderData.status, orderData);
+                
+                // Calculate preparation time based on order items and creation time
+                const preparationTime = this.calculateOrderPreparationTime(orderData.items || [], orderData.created_at, orderData.status);
+                this.updatePreparationTime(preparationTime.remainingSeconds, preparationTime.totalMinutes);
+                
+                UIService.showModal('orderStatusModal');
+                
+                // Update order status modal language
+                LanguageService.updateOrderStatusModal();
+                
+                // Start status updates for active orders
+                if (orderData.status !== 'completed' && orderData.status !== 'cancelled') {
+                    this.updateOrderStatus(orderData.id);
+                    AppState.statusUpdateInterval = setInterval(() => this.updateOrderStatus(orderData.id), AppState.config.statusUpdateInterval);
+                }
+            },
+            
+            /**
+             * Calculate order preparation time
+             * @param {Array} items - Order items
+             * @param {string} createdAt - Order creation time
+             * @param {string} currentStatus - Current order status
+             * @returns {Object} Preparation time calculation
+             */
+            /**
              * Calculate order preparation time
              * @param {Array} items - Order items
              * @param {string} createdAt - Order creation time
@@ -8298,24 +8376,24 @@
                 console.log('calculateOrderPreparationTime called with items:', items);
                 console.log('Order created at:', createdAt);
                 console.log('Current status:', currentStatus);
-                
+
                 // If we have a cached preparation time for this order, use it
                 if (AppState.currentOrderPreparationTime) {
                     console.log('Using cached preparation time:', AppState.currentOrderPreparationTime);
                     return this.calculateRemainingTime(AppState.currentOrderPreparationTime, createdAt, currentStatus);
                 }
-                
+
                 // Calculate preparation time based on the maximum preparation time of ordered items
-                let totalPreparationTime = AppState.config.preparationTime; // Default fallback
-                
+                let totalPreparationTime = 0; // Default to 0
+
                 if (items && items.length > 0) {
                     // Find the maximum preparation time among all items
                     const itemPreparationTimes = items.map((item, index) => {
                         console.log(`Processing item ${index}:`, item);
-                        
+
                         // Try to get preparation time from different possible fields
                         let prepTime = null;
-                        
+
                         // Direct field
                         if (item.preparation_time !== undefined && item.preparation_time !== null) {
                             prepTime = item.preparation_time;
@@ -8349,23 +8427,23 @@
                         }
                         // Use default fallback
                         else {
-                            prepTime = AppState.config.preparationTime;
+                            prepTime = 15; // Fallback to 15 minutes if no time is specified
                             console.log(`No preparation_time found, using default: ${prepTime}`);
                         }
-                        
+
                         // Ensure prepTime is a number
-                        prepTime = Number(prepTime) || AppState.config.preparationTime;
-                        
+                        prepTime = Number(prepTime) || 15;
+
                         console.log(`Final prepTime for item ${index}: ${prepTime}`);
                         return prepTime;
                     });
-                    
+
                     // Use the maximum preparation time among all items (this is correct - the longest item determines total time)
                     const maxPrepTime = Math.max(...itemPreparationTimes);
                     totalPreparationTime = maxPrepTime;
                     console.log('All item preparation times:', itemPreparationTimes);
                     console.log('Maximum preparation time selected:', totalPreparationTime);
-                    
+
                     // Cache this preparation time for future updates
                     AppState.currentOrderPreparationTime = totalPreparationTime;
                     console.log('Cached preparation time for current order:', AppState.currentOrderPreparationTime);
@@ -8374,7 +8452,7 @@
                     // Cache the default time as well
                     AppState.currentOrderPreparationTime = totalPreparationTime;
                 }
-                
+
                 return this.calculateRemainingTime(totalPreparationTime, createdAt, currentStatus);
             },
 
@@ -8558,27 +8636,27 @@
                 }
             },
             
-            /**
+              /**
              * Update preparation time display
              * @param {number} remainingSeconds - Remaining seconds
              */
             updatePreparationTime(remainingSeconds, totalMinutes = null) {
                 const minutes = Math.floor(remainingSeconds / 60);
                 const seconds = remainingSeconds % 60;
-                
+
                 const timeElement = document.getElementById('timeRemaining');
                 const statusElement = document.getElementById('preparationStatus');
-                
+
                 // Update the time display
                 timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
+
                 // Add total time info if available
                 if (totalMinutes && totalMinutes > 0) {
                     const isBengali = AppState.currentLanguage === 'bn';
-                    const totalTimeText = isBengali 
+                    const totalTimeText = isBengali
                         ? `মোট: ${totalMinutes} মিনিট`
                         : `Total: ${totalMinutes} min`;
-                    
+
                     // Update or create total time display
                     let totalTimeElement = document.getElementById('totalPreparationTime');
                     if (!totalTimeElement) {
@@ -8591,7 +8669,7 @@
                     }
                     totalTimeElement.textContent = totalTimeText;
                 }
-                
+
                 if (remainingSeconds > 0) {
                     const isBengali = AppState.currentLanguage === 'bn';
                     if (minutes > 5) {
@@ -8601,10 +8679,63 @@
                     } else {
                         statusElement.textContent = isBengali ? 'প্রায় প্রস্তুত' : 'Almost ready';
                     }
-                    setTimeout(() => this.updatePreparationTime(remainingSeconds - 1, totalMinutes), 1000);
+                    AppState.preparationTimerId = setTimeout(() => this.updatePreparationTime(remainingSeconds - 1, totalMinutes), 1000);
                 } else {
-                    statusElement.textContent = isBengali ? 'প্রস্তুত!' : 'Ready!';
+                    statusElement.textContent = 'প্রস্তুত!';
                     timeElement.textContent = '00:00';
+                }
+            },
+            
+            /**
+             * Enrich order items with preparation time from menu API
+             * @param {Array} orderItems - Order items
+             * @returns {Promise<Array>} Enriched order items
+             */
+            async enrichOrderItemsWithPreparationTime(orderItems) {
+                if (!orderItems || orderItems.length === 0) {
+                    return orderItems;
+                }
+                
+                console.log('Enriching order items with preparation time...');
+                
+                // Get all menu items to cache preparation times
+                try {
+                    const menuResponse = await ApiService.getMenuItems();
+                    const menuItems = menuResponse.data || [];
+                    
+                    // Create a map of menu item ID to preparation time
+                    const preparationTimeMap = {};
+                    menuItems.forEach(menuItem => {
+                        if (menuItem.id && menuItem.preparation_time !== undefined) {
+                            preparationTimeMap[menuItem.id] = menuItem.preparation_time;
+                        }
+                    });
+                    
+                    console.log('Preparation time map:', preparationTimeMap);
+                    
+                    // Enrich order items
+                    const enrichedItems = orderItems.map(orderItem => {
+                        const menuItemId = orderItem.menu_item_id || orderItem.menuItemId;
+                        const prepTime = preparationTimeMap[menuItemId];
+                        
+                        if (prepTime !== undefined) {
+                            console.log(`Enriching item ${menuItemId} with preparation time: ${prepTime}`);
+                            return {
+                                ...orderItem,
+                                preparation_time: prepTime
+                            };
+                        } else {
+                            console.log(`No preparation time found for menu item ${menuItemId}`);
+                            return orderItem;
+                        }
+                    });
+                    
+                    console.log('Enriched order items:', enrichedItems);
+                    return enrichedItems;
+                    
+                } catch (error) {
+                    console.error('Error enriching order items:', error);
+                    return orderItems; // Return original items if enrichment fails
                 }
             },
             
@@ -8616,10 +8747,36 @@
                 try {
                     console.log('updateOrderStatus called for orderId:', orderId);
                     const response = await ApiService.getOrder(orderId);
-                    const order = response.data;
+                    let order = response.data;
                     
                     console.log('Order data received:', order);
                     console.log('Order items:', order.items);
+                    
+                    // Enrich order items with preparation time if needed
+                    if (order.items && order.items.length > 0) {
+                        const hasPreparationTime = order.items.some(item => 
+                            item.preparation_time !== undefined || 
+                            item.preparationTime !== undefined ||
+                            (item.menu_item && item.menu_item.preparation_time !== undefined)
+                        );
+                        
+                        if (!hasPreparationTime) {
+                            console.log('No preparation time found in order items, enriching from menu API...');
+                            order.items = await this.enrichOrderItemsWithPreparationTime(order.items);
+                        }
+                    }
+                    
+                    // Debug: Check preparation time in order items
+                    if (order.items && order.items.length > 0) {
+                        order.items.forEach((item, index) => {
+                            console.log(`Order Item ${index} preparation time:`, {
+                                item: item,
+                                preparation_time: item.preparation_time,
+                                preparationTime: item.preparationTime,
+                                menu_item_preparation_time: item.menu_item && item.menu_item.preparation_time
+                            });
+                        });
+                    }
                     
                     this.updateStatusTimeline(order.status, order);
                     
@@ -9025,6 +9182,11 @@
                     UIService.hideModal('orderStatusModal');
                     if (AppState.statusUpdateInterval) {
                         clearInterval(AppState.statusUpdateInterval);
+                        AppState.statusUpdateInterval = null; // Reset the interval ID
+                    }
+                    if (AppState.preparationTimerId) {
+                        clearTimeout(AppState.preparationTimerId);
+                        AppState.preparationTimerId = null; // Reset the timer ID
                     }
                 });
                 
